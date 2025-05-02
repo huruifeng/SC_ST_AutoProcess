@@ -8,10 +8,10 @@ library(jsonlite)
 library(Matrix)
 library(data.table)
 library(Seurat)
-library(presto)
 library(tidyverse)
+library(jsonlite)
 
-
+cat("===================================================\n")
 # Check if the script is run with the correct number of arguments
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) != 2) {
@@ -29,7 +29,7 @@ if (!dir.exists(output_dir)) {
 
 ## ====================================================
 # Load the Seurat object
-print("load RDS data...")
+cat("load RDS data...\n")
 ## Read the rds onject
 seurat_obj <- readRDS(seurat_obj_file)
 # Check if the Seurat object is valid
@@ -59,21 +59,28 @@ if (!"umap" %in% names(seurat_obj@reductions)) {
 
 ## ===================================================
 # Extract the data
-print("Extract data...")
+cat("Extract data...\n")
 
-print("Save metadata...")
+cat("Save metadata...\n")
 # Save to CSV with index as the first column
 metadata <- seurat_obj@meta.data
 write.csv(metadata, file = paste0(output_dir, "/raw_metadata.csv"), row.names = TRUE)
 
+## Save the metadata column names in a JSON file
+cat("Save metadata feature names...\n")
+# Extract metadata column names
+column_names <- colnames(metadata)
+# Save column names to JSON
+write_json(column_names, path = file.path(output_dir, "raw_metadata_columns.json"), pretty = TRUE)
+
 # save the umap embedding
-print("Save umap embedding...")
+cat("Save umap embedding...\n")
 umap_embeddings <- seurat_obj@reductions$umap@cell.embeddings
 write.csv(umap_embeddings, file = paste0(output_dir, "/raw_umap_embeddings.csv"), row.names = TRUE)
 
 
 # Extract the normalized counts
-print("Save normalized counts...")
+cat("Save normalized counts...\n")
 ## Extract normalized data
 normalized_counts <- seurat_obj@assays$RNA@data  # This is a sparse matrix
 
@@ -94,6 +101,7 @@ nonzero_data <- as.data.table(nonzero_data)
 # Save to CSV with index as the first column in a fast way
 fwrite(nonzero_data, file = paste0(output_dir, "/raw_normalized_counts.csv"), row.names = FALSE)
 
+cat("Done! Data extraction is done! ^_^ ...\n")
 
 
 

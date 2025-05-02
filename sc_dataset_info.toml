@@ -1,0 +1,47 @@
+[seurat]
+seurat_file = "DietFullIntegration_Oct2023_FinalOSR_6HC_MTG_FebCA_MajorMarkersUpdated2.rds"
+datatype = "scRNAseq"
+
+[dataset]
+dataset_name = "PD5D_MTG_snRNAseq"
+assay = "scRNAseq"
+description = ""
+PI_full_name = "Clemens Scherzer"
+PI_email = "clemens.scherzer@yale.edu"
+first_contributor = "Jacob Parker"
+first_contributor_email = "jacob.parker@yale.edu"
+other_contributors = ""
+support_grants = ""
+other_funding_source = ""
+publication_DOI = ""
+publication_PMID = ""
+n_samples = 106
+brain_super_region = "temporallobe"
+brain_region = "Middle temporal gyrus"
+sample_info = ""
+
+[study]
+study_name = "Parkinson5D"
+description = ""
+team_name = "Team Scherzer"
+lab_name = "NeuroGenomics"
+submitter_name = ""
+submitter_email = ""
+
+[protocol]
+protocol_id = "P001"
+protocol_name = "P001_snRNAseq"
+version = ""
+github_url = ""
+sample_collection_summary = ""
+cell_extraction_summary = ""
+lib_prep_summary = ""
+data_processing_summary = ""
+protocols_io_DOI = ""
+other_reference = ""
+
+[meta_features]
+selected_features = [ "nCount_RNA", "nFeature_RNA", "sex", "seurat_clusters", "RNA_snn_res.1.5", "MajorCellTypes", "CellSubtypes", "updrs", "Complex_Assignment", "mmse", "sample_id", "case",]
+sample_id_column = "sample_id"
+major_cluster_column = "MajorCellTypes"
+condition_column = "case"
