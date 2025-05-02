@@ -114,7 +114,7 @@ with open(f"{dataset_path}/extract_seurat_output.log", "w") as log_file:
 
     # Stream output live
     for line in process.stdout:
-        print(line)         # print to terminal
+        print(line, end="")         # print to terminal
         log_file.write(line)        # write to log file
         log_file.flush()            # ensure it’s written immediately
 
@@ -145,7 +145,7 @@ with open(f"{dataset_path}/prepare_meta_output.log", "w") as log_file:
         exit(1)
     # Stream output live
     for line in process_py.stdout:
-        print(line)         # print to terminal
+        print(line, end="")         # print to terminal
         log_file.write(line)        # write to log file
         log_file.flush()            # ensure it’s written immediately
 
