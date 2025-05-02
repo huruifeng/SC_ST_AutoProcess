@@ -79,13 +79,19 @@ if not condition_column:
     exit(1)
 
 ## ==============================================================
-print("Running R script...Extract Seurat data...")
-## run the R script
+## save a copy of the toml file in the dataset folder
 dataset_path = f"datasets/{dataset_name}"
  ## check if dataset exists
 if not os.path.exists(dataset_path):
     os.makedirs(dataset_path)
 
+## copy the toml file to the dataset folder
+with open(f"{dataset_path}/dataset_info.toml", "w") as f:
+    toml.dump(toml_data, f)
+
+## ==============================================================
+print("Running R script...Extract Seurat data...")
+## run the R script
 with open(f"{dataset_path}/extract_seurat_output.log", "w") as log_file:
     if dataset_type.lower() in ["scrnaseq", "snrnaseq"]:
         process = subprocess.Popen(

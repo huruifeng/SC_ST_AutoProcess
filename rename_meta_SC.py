@@ -16,6 +16,14 @@ sample_col = sys.argv[3]
 cluster_col = sys.argv[4]
 condition_col = sys.argv[5]
 
+print("Checking inputs...")
+if sample_col not in kept_features:
+    kept_features.append(sample_col)
+if cluster_col not in kept_features:
+    kept_features.append(cluster_col)
+if condition_col not in kept_features:
+    kept_features.append(condition_col)
+
 print("Loading metadata...")
 metadata = pd.read_csv(dataset_path + "/raw_metadata.csv", index_col=0, header=0)
 metadata = metadata.loc[:, kept_features]
