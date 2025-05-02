@@ -125,7 +125,7 @@ print("Running python script...Prepare meta data...")
 with open(f"{dataset_path}/prepare_meta_output.log", "w") as log_file:
     if dataset_type.lower() in ["scrnaseq", "snrnaseq"]:
         process = subprocess.Popen(
-            ["python3", "ename_meta_SC.py",dataset_path, ",".join(selected_features), sample_id_column, major_cluster_column, condition_column],
+            ["python3", "rename_meta_SC.py",dataset_path, ",".join(selected_features), sample_id_column, major_cluster_column, condition_column],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,  # get string output, not bytes

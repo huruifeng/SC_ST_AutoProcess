@@ -4,7 +4,7 @@ import json
 import os
 import sys
 
-from utils import  is_categorical, dumps_compact_lists
+from utils.funcs import is_categorical, dumps_compact_lists
 
 print("============================================")
 # %% ==============================
