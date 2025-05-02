@@ -61,7 +61,7 @@ if not meta_features:
     print("No meta features found in the toml file.")
     exit(1)
 
-selected_features = meta_features.get("selected_features", "")
+selected_features = meta_features.get("selected_features", [])
 if not selected_features:
     print("No selected features found in the toml file.")
     exit(1)
@@ -90,6 +90,7 @@ with open(f"{dataset_path}/dataset_info.toml", "w") as f:
     toml.dump(toml_data, f)
 
 ## ==============================================================
+print("==================================================")
 print("Running R script...Extract Seurat data...")
 ## run the R script
 with open(f"{dataset_path}/extract_seurat_output.log", "w") as log_file:
@@ -120,18 +121,20 @@ with open(f"{dataset_path}/extract_seurat_output.log", "w") as log_file:
     process.wait()
 
 ## ==============================================================
+print("=================================================")
 print("Running python script...Prepare meta data...")
 ## run the python script
+print("Selected features:", ",".join(selected_features))
 with open(f"{dataset_path}/prepare_meta_output.log", "w") as log_file:
     if dataset_type.lower() in ["scrnaseq", "snrnaseq"]:
-        process = subprocess.Popen(
+        process_py = subprocess.Popen(
             ["python3", "rename_meta_SC.py",dataset_path, ",".join(selected_features), sample_id_column, major_cluster_column, condition_column],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,  # get string output, not bytes
         )
     elif dataset_type.lower() in ["visiumst"]:
-        process = subprocess.Popen(
+        process_py = subprocess.Popen(
             ["python3", "rename_meta_Visium.py",dataset_path, ",".join(selected_features), sample_id_column, major_cluster_column, condition_column],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -141,12 +144,13 @@ with open(f"{dataset_path}/prepare_meta_output.log", "w") as log_file:
         print(f"Invalid dataset type {dataset_type} found in the toml file.")
         exit(1)
     # Stream output live
-    for line in process.stdout:
+    for line in process_py.stdout:
         print(line)         # print to terminal
         log_file.write(line)        # write to log file
         log_file.flush()            # ensure it’s written immediately
 
-    process.wait()
+    process_py.wait()
+
 
 ## ==============================================================
 

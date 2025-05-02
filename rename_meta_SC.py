@@ -6,6 +6,9 @@ import sys
 
 from utils.funcs import is_categorical, dumps_compact_lists
 
+import functools
+print = functools.partial(print, flush=True)
+
 print("============================================")
 # %% ==============================
 # Get the arguments
