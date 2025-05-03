@@ -144,6 +144,7 @@ embeddings_data_nk = embeddings_data.sample(n=sample_rows, random_state=42)
 embeddings_data_nk.to_csv(dataset_path + "/umap_embeddings_50k.csv", index_label="cs_id")
 
 # %% ============================================================================
+print("Processing coordinates...[renaming barcode to cs_id]")
 files = os.listdir(dataset_path + "/coordinates")
 for file in files:
     if file.endswith(".csv"):
@@ -165,13 +166,13 @@ expression_data.drop("Spot", axis=1, inplace=True)
 expression_data["Expression"] = expression_data["Expression"].round(2)
 
 # %% ============================================================================
-# Group data by gene
-print("Grouping by gene... be patient...")
-grouped_by_gene = expression_data.groupby("Gene")
-
 ## Save gene jsons
 print("Saving gene jsons...")
 expression_data["sample_id"] = expression_data["cs_id"].map(spot_to_sample)
+
+# Group data by gene
+print("Grouping by gene... be patient...")
+grouped_by_gene = expression_data.groupby("Gene")
 
 all_genes = grouped_by_gene.groups.keys()
 all_genes = [gene_i.replace("/", "_") for gene_i in list(set(all_genes))]

@@ -125,12 +125,12 @@ normalized_counts <- seurat_obj@assays$Spatial@data  # This is a sparse matrix
 
 # Convert sparse matrix to triplet format (long format)
 long_data <- summary(normalized_counts)
-# Get row (gene) and column (cell) names
+# Get row (gene) and column (spot) names
 long_data$Gene <- rownames(normalized_counts)[long_data$i]
-long_data$Cell <- colnames(normalized_counts)[long_data$j]
+long_data$Spot <- colnames(normalized_counts)[long_data$j]
 long_data$Expression <- long_data$x
 # Keep only necessary columns
-long_data <- long_data[, c("Gene", "Cell", "Expression")]
+long_data <- long_data[, c("Gene", "Spot", "Expression")]
 
 # Filter out zero values
 nonzero_data <- long_data[long_data$Expression > 0, ]
