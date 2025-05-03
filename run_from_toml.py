@@ -5,7 +5,7 @@ import subprocess
 ## ==============================================================
 print("Loading toml file...")
 # Check if the toml file exists
-toml_file = "sc_dataset_info.toml"
+toml_file = "visium_dataset_info.toml"
 if not os.path.exists(toml_file):
     print(f"File {toml_file} not found.")
     exit(1)

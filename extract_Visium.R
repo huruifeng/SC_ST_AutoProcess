@@ -10,6 +10,7 @@ library(data.table)
 library(Seurat)
 library(tidyverse)
 library(jsonlite)
+library(png)
 
 cat("===================================================\n")
 # Check if the script is run with the correct number of arguments
@@ -39,12 +40,12 @@ if (!inherits(seurat_obj, "Seurat")) {
 capture.output(str(seurat_obj), file = paste0(output_dir, "/seurat_obj_structure.txt"))
 
 # Check if the Seurat object has the necessary assay
-if (!"RNA" %in% names(seurat_obj@assays)) {
-  stop("The Seurat object does not contain the 'RNA' assay.")
+if (!"Spatial" %in% names(seurat_obj@assays)) {
+  stop("The Seurat object does not contain the 'Spatial' assay.")
 }
 # Check if the Seurat object has the necessary assay data
-if (!"data" %in% slotNames(seurat_obj@assays$RNA)) {
-  stop("The Seurat object does not contain the 'data' slot in the 'RNA' assay.")
+if (!"data" %in% slotNames(seurat_obj@assays$Spatial)) {
+  stop("The Seurat object does not contain the 'data' slot in the 'Spatial' assay.")
 }
 
 # Check if the Seurat object has the necessary metadata
@@ -96,7 +97,7 @@ for (i in 1:length(all_names)) {
 
     image_name = all_names[i]
     spatial_data = images[[image_name]]
-    image_array = spatial_data@image
+    img_array = spatial_data@image
     coordinates = spatial_data@coordinates
 
     # Extract the scale.factors from the Seurat object
@@ -113,17 +114,14 @@ for (i in 1:length(all_names)) {
     write(json_output, paste0(coordinates_dir, "/raw_scalefactors_", image_name, ".json"))
     # Save coordinates
     write.csv(coordinates, paste0(coordinates_dir, "/raw_coordinates_", image_name, ".csv"), row.names = TRUE)
-
-    # Convert to EBImage format
-    image_eb <- Image(image_array, colormode = "Color")
     # Save as PNG (best for analysis)
-    writeImage(image_eb, paste0(images_dir, "/raw_image_", image_name, ".png"), type = "png")
+    png::writePNG(img_array, target = paste0(images_dir, "/raw_image_", image_name, ".png"))
 }
 
 # Extract the normalized counts
 cat("Save normalized counts...\n")
 ## Extract normalized data
-normalized_counts <- seurat_obj@assays$RNA@data  # This is a sparse matrix
+normalized_counts <- seurat_obj@assays$Spatial@data  # This is a sparse matrix
 
 # Convert sparse matrix to triplet format (long format)
 long_data <- summary(normalized_counts)

@@ -44,7 +44,7 @@ print("Renaming spot id...")
 new_ids = []
 sample_cellspot_n = {}
 for index, row in metadata.iterrows():
-    sample_id = row[sample_col]
+    sample_id = row["sample_id"]
     if sample_id not in sample_cellspot_n:
         sample_cellspot_n[sample_id] = 0
     sample_cellspot_n[sample_id] += 1
@@ -140,6 +140,14 @@ embeddings_data_nk.to_csv(dataset_path + "/umap_embeddings_100k.csv", index_labe
 sample_rows = 50000 if n_rows > 50000 else n_rows
 embeddings_data_nk = embeddings_data.sample(n=sample_rows, random_state=42)
 embeddings_data_nk.to_csv(dataset_path + "/umap_embeddings_50k.csv", index_label="cs_id")
+
+# %% ============================================================================
+files = os.listdir(dataset_path + "/coordinates")
+for file in files:
+    if file.endswith(".csv"):
+        df = pd.read_csv(dataset_path + "/coordinates/" + file, index_col=0, header=0)
+        df.rename(index=barcode_to_csid, inplace=True)
+        df.to_csv(dataset_path + "/coordinates/" + file, index_label="cs_id")
 
 # %% ============================================================================
 ## Process expression data
