@@ -208,6 +208,7 @@ for gene, df in grouped_by_gene:
 
 # %% ============================================================================
 ## calculate psuedo count of each gene in each sample
+print("=============================================")
 print("Calculating pseudo count...")
 os.makedirs(dataset_path + "/gene_pseudobulk", exist_ok=True)
 
