@@ -39,13 +39,15 @@ if "sample_id" != sample_col:
     print("Renaming sample id...")
     metadata.drop("sample_id", axis=1, inplace=True, errors="ignore")
     metadata = metadata.rename(columns={sample_col: "sample_id"})
+    kept_features.remove(sample_col)
+    kept_features.append("sample_id")
 
 ## Rename the cell id as: SampleID_CellSerialNumber
 print("Renaming cell id...")
 new_ids = []
 sample_cell_n = {}
 for index, row in metadata.iterrows():
-    sample_id = row[sample_col]
+    sample_id = row["sample_id"]
     if sample_id not in sample_cell_n:
         sample_cell_n[sample_id] = 0
     sample_cell_n[sample_id] += 1

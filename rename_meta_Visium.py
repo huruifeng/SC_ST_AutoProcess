@@ -38,6 +38,8 @@ if "sample_id" != sample_col:
     print("Renaming sample id...")
     metadata.drop("sample_id", axis=1, inplace=True, errors="ignore")
     metadata = metadata.rename(columns={sample_col: "sample_id"})
+    kept_features.remove(sample_col)
+    kept_features.append("sample_id")
 
 ## Rename the spot id as: SampleID_spotSerialNumber
 print("Renaming spot id...")
