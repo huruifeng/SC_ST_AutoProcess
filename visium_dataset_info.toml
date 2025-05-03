@@ -1,0 +1,47 @@
+[seurat]
+seurat_file = "comb_seurat_smoothed_V4_cell2loc_01222025.rds"
+datatype = "VisiumST"
+
+[dataset]
+dataset_name = "PD5D_MTG_VisiumST"
+assay = "VisiumST"
+description = ""
+PI_full_name = "Clemens Scherzer"
+PI_email = "clemens.scherzer@yale.edu"
+first_contributor = "Jie Yuan"
+first_contributor_email = "jie.yuan@yale.edu"
+other_contributors = ""
+support_grants = ""
+other_funding_source = ""
+publication_DOI = ""
+publication_PMID = ""
+n_samples = 96
+brain_super_region = "temporallobe"
+brain_region = "Middle temporal gyrus"
+sample_info = ""
+
+[study]
+study_name = "Parkinson5D"
+description = ""
+team_name = "Team Scherzer"
+lab_name = "NeuroGenomics"
+submitter_name = ""
+submitter_email = ""
+
+[protocol]
+protocol_id = "P002"
+protocol_name = "P001_VisiumST"
+version = ""
+github_url = ""
+sample_collection_summary = ""
+cell_extraction_summary = ""
+lib_prep_summary = ""
+data_processing_summary = ""
+protocols_io_DOI = ""
+other_reference = ""
+
+[meta_features]
+selected_features = ["nCount_Spatial","nFeature_Spatial","sample_name","sex","diagnosis","last_mmse_test_score","motor_updrs_score","Spatial_snn_res.0.3","seurat_clusters","Spatial_snn_res.0.5","layer_label_v2","smoothed_label_s5"]
+sample_id_column = "sample_name"
+major_cluster_column = "smoothed_label_s5"
+condition_column = "diagnosis"

@@ -13,7 +13,6 @@ print("============================================")
 # %% ==============================
 # Get the arguments
 dataset_path = sys.argv[1]
-# dataset_name = "SC_data"
 kept_features = sys.argv[2].split(",")
 sample_col = sys.argv[3]
 cluster_col = sys.argv[4]
@@ -40,20 +39,20 @@ if "sample_id" != sample_col:
     metadata.drop("sample_id", axis=1, inplace=True, errors="ignore")
     metadata = metadata.rename(columns={sample_col: "sample_id"})
 
-## Rename the cell id as: SampleID_CellSerialNumber
-print("Renaming cell id...")
+## Rename the spot id as: SampleID_spotSerialNumber
+print("Renaming spot id...")
 new_ids = []
-sample_cell_n = {}
+sample_cellspot_n = {}
 for index, row in metadata.iterrows():
     sample_id = row[sample_col]
-    if sample_id not in sample_cell_n:
-        sample_cell_n[sample_id] = 0
-    sample_cell_n[sample_id] += 1
-    c_id = sample_id + "_c" + str(sample_cell_n[sample_id])
+    if sample_id not in sample_cellspot_n:
+        sample_cellspot_n[sample_id] = 0
+    sample_cellspot_n[sample_id] += 1
+    c_id = sample_id + "_s" + str(sample_cellspot_n[sample_id])
     new_ids.append(c_id)
 metadata["cs_id"] = new_ids
 
-barcode_to_cid = metadata["cs_id"].to_dict()
+barcode_to_csid = metadata["cs_id"].to_dict()
 
 metadata["barcode"] = metadata.index.tolist()
 metadata = metadata.set_index("cs_id")
@@ -62,47 +61,47 @@ all_samples = metadata["sample_id"].unique().tolist()
 with open(dataset_path + "/sample_list.json", "w") as f:
     json.dump(sorted(all_samples), f)
 
-cell_to_sample = metadata["sample_id"].to_dict()
-# Save cell_to_sample mapping
-with open(f"{dataset_path}/cell_to_sample.json", "w") as f:
-    json.dump(cell_to_sample, f, indent=2)
+spot_to_sample = metadata["sample_id"].to_dict()
+# Save spot_to_sample mapping
+with open(f"{dataset_path}/spot_to_sample.json", "w") as f:
+    json.dump(spot_to_sample, f, indent=2)
 
 # %% ==============================================
-## Process cell metadata
-print("Processing cell metadata...")
+## Process spot metadata
+print("Processing spot metadata...")
 sample_level_features = []
-cell_level_features = []
+spot_level_features = []
 sample_groups = metadata.groupby("sample_id")
 for feature in kept_features:
     is_sample_level = all(group[feature].nunique() == 1 for _, group in sample_groups)
     if is_sample_level:
         sample_level_features.append(feature)
     else:
-        cell_level_features.append(feature)
+        spot_level_features.append(feature)
 
-cell_meta_list = cell_level_features
-metadata_lite = metadata.loc[:, cell_meta_list]
-cell_meta_mapping = {}
-for cell_meta in cell_meta_list:
+spot_meta_list = spot_level_features
+metadata_lite = metadata.loc[:, spot_meta_list]
+spot_meta_mapping = {}
+for spot_meta in spot_meta_list:
     # Check if the column is categorical
-    if is_categorical(metadata_lite[cell_meta], unique_threshold=0.2):
+    if is_categorical(metadata_lite[spot_meta], unique_threshold=0.2):
         # Convert to categorical
-        cat_series = metadata_lite[cell_meta].astype("category")
+        cat_series = metadata_lite[spot_meta].astype("category")
 
         cat_counts = cat_series.value_counts().to_dict()
 
         # Replace original column with codes
-        metadata_lite[cell_meta] = cat_series.cat.codes
+        metadata_lite[spot_meta] = cat_series.cat.codes
 
-        # Store mapping, and calculate the number of cells in each category
+        # Store mapping, and calculate the number of spots in each category
         mapping = {i: [cat, cat_counts[cat]] for i, cat in enumerate(cat_series.cat.categories)}
-        cell_meta_mapping[cell_meta] = mapping
+        spot_meta_mapping[spot_meta] = mapping
 
 # Save mapping to JSON
-with open(dataset_path + "/cell_meta_mapping.json", "w") as f:
-    f.write(dumps_compact_lists(cell_meta_mapping, indent=4))
+with open(dataset_path + "/spot_meta_mapping.json", "w") as f:
+    f.write(dumps_compact_lists(spot_meta_mapping, indent=4))
 
-metadata_lite.to_csv(dataset_path + "/cell_metadata.csv")
+metadata_lite.to_csv(dataset_path + "/spot_metadata.csv")
 
 print("Processing sample metadata...")
 sample_meta_list = sample_level_features
@@ -112,7 +111,7 @@ sample_meta = sample_meta.set_index("sample_id")
 sample_meta.to_csv(dataset_path + "/sample_metadata.csv")
 
 with open(dataset_path + "/meta_list.json", "w") as f:
-    json.dump(sorted(cell_meta_list + sample_meta_list), f)
+    json.dump(sorted(spot_meta_list + sample_meta_list), f)
 
 # %% ==============================================
 ## Process embedding data
@@ -126,11 +125,11 @@ embeddings_data["UMAP_2"] = embeddings_data["UMAP_2"].round(2)
 # Reset index and rename using the mapping
 print("Renaming embeddings....")
 embeddings_data = embeddings_data.reset_index()  # Move index to a column
-embeddings_data["index"] = embeddings_data["index"].map(barcode_to_cid)  # Rename using mapping
+embeddings_data["index"] = embeddings_data["index"].map(barcode_to_csid)  # Rename using mapping
 embeddings_data = embeddings_data.set_index("index")  # Set the renamed column as index
 embeddings_data.to_csv(dataset_path + "/umap_embeddings.csv", index_label="cs_id")
 
-## sampling umap, get 100k cells
+## sampling umap, get 100k spots
 print("Sampling umap...")
 n_rows = embeddings_data.shape[0]
 
@@ -147,10 +146,10 @@ embeddings_data_nk.to_csv(dataset_path + "/umap_embeddings_50k.csv", index_label
 print("Loading expression data...(Takes a while...be patient...)")
 ## rename_expression_data
 expression_data = pd.read_csv(dataset_path + "/raw_normalized_counts.csv", index_col=0, header=0)
-## rename "Cell" column use barcode_cid map
+## rename "Spot" column use barcode_cid map
 print("Renaming expression....")
-expression_data["cs_id"] = expression_data["Cell"].map(barcode_to_cid)
-expression_data.drop("Cell", axis=1, inplace=True)
+expression_data["cs_id"] = expression_data["Spot"].map(barcode_to_csid)
+expression_data.drop("Spot", axis=1, inplace=True)
 
 ## "Expression" column keep 4 digits after the decimal point
 expression_data["Expression"] = expression_data["Expression"].round(2)
@@ -162,7 +161,7 @@ grouped_by_gene = expression_data.groupby("Gene")
 
 ## Save gene jsons
 print("Saving gene jsons...")
-expression_data["sample_id"] = expression_data["cs_id"].map(cell_to_sample)
+expression_data["sample_id"] = expression_data["cs_id"].map(spot_to_sample)
 
 all_genes = grouped_by_gene.groups.keys()
 all_genes = [gene_i.replace("/", "_") for gene_i in list(set(all_genes))]
