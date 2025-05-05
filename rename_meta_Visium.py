@@ -75,7 +75,7 @@ sample_level_features = []
 spot_level_features = []
 sample_groups = metadata.groupby("sample_id")
 for feature in kept_features:
-    is_sample_level = all(group[feature].nunique() == 1 for _, group in sample_groups)
+    is_sample_level = all(group[feature].nunique() <= 2 for _, group in sample_groups)
     if is_sample_level:
         sample_level_features.append(feature)
     else:
