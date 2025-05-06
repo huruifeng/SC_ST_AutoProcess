@@ -97,7 +97,7 @@ for cell_meta in cell_meta_list:
         metadata_lite[cell_meta] = cat_series.cat.codes
 
         # Store mapping, and calculate the number of cells in each category
-        mapping = {i: [cat, cat_counts[cat]] for i, cat in enumerate(cat_series.cat.categories)}
+        mapping = {i: [cat, cat_counts[cat]] for i, cat in enumerate(cat_series.cat.categories)} ## with counts
         cell_meta_mapping[cell_meta] = mapping
 
 # Save mapping to JSON
@@ -111,6 +111,7 @@ sample_meta_list = sample_level_features
 sample_meta = metadata.loc[:, sample_meta_list]
 sample_meta = sample_meta.drop_duplicates()
 sample_meta = sample_meta.set_index("sample_id")
+sample_meta.fillna("", inplace=True)
 sample_meta.to_csv(dataset_path + "/sample_metadata.csv")
 
 with open(dataset_path + "/meta_list.json", "w") as f:
@@ -143,6 +144,7 @@ embeddings_data_nk.to_csv(dataset_path + "/umap_embeddings_100k.csv", index_labe
 sample_rows = 50000 if n_rows > 50000 else n_rows
 embeddings_data_nk = embeddings_data.sample(n=sample_rows, random_state=42)
 embeddings_data_nk.to_csv(dataset_path + "/umap_embeddings_50k.csv", index_label="cs_id")
+
 
 # %% ============================================================================
 ## Process expression data

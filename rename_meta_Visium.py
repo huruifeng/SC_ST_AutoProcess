@@ -96,7 +96,7 @@ for spot_meta in spot_meta_list:
         metadata_lite[spot_meta] = cat_series.cat.codes
 
         # Store mapping, and calculate the number of spots in each category
-        mapping = {i: [cat, cat_counts[cat]] for i, cat in enumerate(cat_series.cat.categories)}
+        mapping = {i: [cat, cat_counts[cat]] for i, cat in enumerate(cat_series.cat.categories)} ## with counts
         spot_meta_mapping[spot_meta] = mapping
 
 # Save mapping to JSON
@@ -110,6 +110,7 @@ sample_meta_list = sample_level_features
 sample_meta = metadata.loc[:, sample_meta_list]
 sample_meta = sample_meta.drop_duplicates()
 sample_meta = sample_meta.set_index("sample_id")
+sample_meta.fillna("", inplace=True)
 sample_meta.to_csv(dataset_path + "/sample_metadata.csv")
 
 with open(dataset_path + "/meta_list.json", "w") as f:
