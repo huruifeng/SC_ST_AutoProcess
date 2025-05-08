@@ -66,7 +66,7 @@ with open(dataset_path + "/sample_list.json", "w") as f:
 
 cell_to_sample = metadata["sample_id"].to_dict()
 # Save cell_to_sample mapping
-with open(f"{dataset_path}/cell_to_sample.json", "w") as f:
+with open(f"{dataset_path}/cellspot_to_sample.json", "w") as f:
     json.dump(cell_to_sample, f, indent=2)
 
 # %% ==============================================
@@ -101,10 +101,10 @@ for cell_meta in cell_meta_list:
         cell_meta_mapping[cell_meta] = mapping
 
 # Save mapping to JSON
-with open(dataset_path + "/cell_meta_mapping.json", "w") as f:
+with open(dataset_path + "/cellspot_meta_mapping.json", "w") as f:
     f.write(dumps_compact_lists(cell_meta_mapping, indent=4))
 
-metadata_lite.to_csv(dataset_path + "/cell_metadata.csv")
+metadata_lite.to_csv(dataset_path + "/cellspot_metadata.csv")
 
 print("Processing sample metadata...")
 sample_meta_list = sample_level_features
