@@ -6,7 +6,7 @@ import subprocess
 ## ==============================================================
 print("Loading toml file...")
 # Check if the toml file exists
-toml_file = "sc_dataset_info.toml"
+toml_file = "visium_dataset_info.toml"
 if not os.path.exists(toml_file):
     print(f"File {toml_file} not found.")
     exit(1)
@@ -68,9 +68,6 @@ if not selected_features:
     exit(1)
 
 rename_features = meta_features.get("rename_features", {})
-if not rename_features:
-    print("No rename features found in the toml file.")
-    exit(1)
 rename_features = json.dumps(rename_features)
 
 sample_id_column = meta_features.get("sample_id_column", "")

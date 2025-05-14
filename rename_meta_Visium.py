@@ -34,6 +34,11 @@ if cluster_col not in kept_features:
 if condition_col not in kept_features:
     kept_features.append(condition_col)
 
+for feature in rename_features:
+    if feature not in kept_features:
+        print(f"Feature {feature} not in kept features. Exiting...")
+        exit(1)
+
 print("Loading metadata...")
 metadata = pd.read_csv(dataset_path + "/raw_metadata.csv", index_col=0, header=0)
 metadata = metadata.loc[:, kept_features]
@@ -42,7 +47,12 @@ metadata = metadata.loc[:, kept_features]
 print("Renaming features...")
 for feature in rename_features:
     metadata = metadata.rename(columns={feature: rename_features[feature]})
+    kept_features.remove(feature)
+    kept_features.append(rename_features[feature])
+
 metadata = metadata.rename(columns={condition_col: "Condition"})
+kept_features.remove(condition_col)
+kept_features.append("Condition")
 
 ## if the column data is float, keep 2 digits after the decimal point
 # Round only float columns to 2 decimal places
