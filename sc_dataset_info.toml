@@ -41,7 +41,15 @@ protocols_io_DOI = ""
 other_reference = ""
 
 [meta_features]
-selected_features = [ "nCount_RNA", "nFeature_RNA", "sex", "seurat_clusters", "RNA_snn_res.1.5", "MajorCellTypes", "CellSubtypes", "updrs", "Complex_Assignment", "mmse", "sample_id", "case",]
+selected_features = [ "nCount_RNA", "nFeature_RNA", "sex",  "MajorCellTypes", "updrs", "Complex_Assignment", "mmse", "sample_id", "case",]
 sample_id_column = "sample_id"
-major_cluster_column = "MajorCellTypes"
+major_cluster_column = "Complex_Assignment"
 condition_column = "case"
+
+[meta_features.rename_features]
+Complex_Assignment = "SubCellTypes"
+
+
+[visium]
+visium_default_features = []
+visium_default_samples = []

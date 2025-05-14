@@ -15,9 +15,19 @@ print("============================================")
 dataset_path = sys.argv[1]
 # dataset_name = "SC_data"
 kept_features = sys.argv[2].split(",")
-sample_col = sys.argv[3]
-cluster_col = sys.argv[4]
-condition_col = sys.argv[5]
+rename_features = json.loads(sys.argv[3])
+sample_col = sys.argv[4]
+cluster_col = sys.argv[5]
+condition_col = sys.argv[6]
+
+print("============================================")
+print("Dataset path: ", dataset_path)
+print("Kept features: ", kept_features)
+print("Rename features: ", rename_features)
+print("Sample column: ", sample_col)
+print("Cluster column: ", cluster_col)
+print("Condition column: ", condition_col)
+# %% ==============================
 
 print("Checking inputs...")
 if sample_col not in kept_features:
@@ -27,9 +37,23 @@ if cluster_col not in kept_features:
 if condition_col not in kept_features:
     kept_features.append(condition_col)
 
+for feature in rename_features:
+    if feature not in kept_features:
+        print(f"Feature {feature} not in kept features. Exiting...")
+        exit(1)
+
+exit(0)
+
 print("Loading metadata...")
 metadata = pd.read_csv(dataset_path + "/raw_metadata.csv", index_col=0, header=0)
 metadata = metadata.loc[:, kept_features]
+
+## rename features
+print("Renaming features...")
+for feature in rename_features:
+    metadata = metadata.rename(columns={feature: rename_features[feature]})
+metadata = metadata.rename(columns={condition_col: "Condition"})
+
 ## if the column data is float, keep 2 digits after the decimal point
 # Round only float columns to 2 decimal places
 metadata[metadata.select_dtypes(include=['float']).columns] = metadata.select_dtypes(include=['float']).round(2)

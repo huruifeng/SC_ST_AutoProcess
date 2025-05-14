@@ -41,7 +41,15 @@ protocols_io_DOI = ""
 other_reference = ""
 
 [meta_features]
-selected_features = ["nCount_Spatial","nFeature_Spatial","sample_name","sex","diagnosis","last_mmse_test_score","motor_updrs_score","Spatial_snn_res.0.3","seurat_clusters","Spatial_snn_res.0.5","layer_label_v2","smoothed_label_s5"]
+selected_features = ["nCount_Spatial","nFeature_Spatial","sample_name","sex","diagnosis","last_mmse_test_score","motor_updrs_score","smoothed_label_s5"]
 sample_id_column = "sample_name"
 major_cluster_column = "smoothed_label_s5"
 condition_column = "diagnosis"
+
+[meta_features.rename_features]
+## e.g., Complex_Assignment = "SubCellTypes"
+
+
+[visium_defaults]
+samples = ["BN2023","BN1076"]
+features = ["smoothed_label_s5","SNCA"]

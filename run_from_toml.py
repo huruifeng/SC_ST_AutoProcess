@@ -1,5 +1,6 @@
 import toml
 import os
+import json
 import subprocess
 
 ## ==============================================================
@@ -65,6 +66,13 @@ selected_features = meta_features.get("selected_features", [])
 if not selected_features:
     print("No selected features found in the toml file.")
     exit(1)
+
+rename_features = meta_features.get("rename_features", {})
+if not rename_features:
+    print("No rename features found in the toml file.")
+    exit(1)
+rename_features = json.dumps(rename_features)
+
 sample_id_column = meta_features.get("sample_id_column", "")
 if not sample_id_column:
     print("No sample id column found in the toml file.")
@@ -128,14 +136,14 @@ print("Selected features:", ",".join(selected_features))
 with open(f"{dataset_path}/prepare_meta_output.log", "w") as log_file:
     if dataset_type.lower() in ["scrnaseq", "snrnaseq"]:
         process_py = subprocess.Popen(
-            ["python3", "rename_meta_SC.py",dataset_path, ",".join(selected_features), sample_id_column, major_cluster_column, condition_column],
+            ["python3", "rename_meta_SC.py",dataset_path, ",".join(selected_features), rename_features, sample_id_column, major_cluster_column, condition_column],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,  # get string output, not bytes
         )
     elif dataset_type.lower() in ["visiumst"]:
         process_py = subprocess.Popen(
-            ["python3", "rename_meta_Visium.py",dataset_path, ",".join(selected_features), sample_id_column, major_cluster_column, condition_column],
+            ["python3", "rename_meta_Visium.py",dataset_path, ",".join(selected_features), rename_features, sample_id_column, major_cluster_column, condition_column],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,  # get string output, not bytes
