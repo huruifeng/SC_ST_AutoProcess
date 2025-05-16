@@ -43,7 +43,7 @@ other_reference = ""
 [meta_features]
 selected_features = [ "nCount_RNA", "nFeature_RNA", "sex",  "MajorCellTypes", "updrs", "Complex_Assignment", "mmse", "sample_id", "case",]
 sample_id_column = "sample_id"
-major_cluster_column = "Complex_Assignment"
+main_cluster_column = "Complex_Assignment"
 condition_column = "case"
 
 [meta_features.rename_features]

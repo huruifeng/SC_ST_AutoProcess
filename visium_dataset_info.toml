@@ -43,7 +43,7 @@ other_reference = ""
 [meta_features]
 selected_features = ["nCount_Spatial","nFeature_Spatial","sample_name","sex","diagnosis","last_mmse_test_score","motor_updrs_score","smoothed_label_s5"]
 sample_id_column = "sample_name"
-major_cluster_column = "smoothed_label_s5"
+main_cluster_column = "smoothed_label_s5"
 condition_column = "diagnosis"
 
 [meta_features.rename_features]
