@@ -26,9 +26,9 @@ cluster_col <- args[3]
 condition_col <- args[4]
 sample_col <- args[5]
 
-celltypemarkers_folder = paste0(output_dir, "/celltypemarkers")
-if (!dir.exists(celltypemarkers_folder)) {
-  dir.create(celltypemarkers_folder, recursive = TRUE)
+clustermarkers_folder = paste0(output_dir, "/clustermarkers")
+if (!dir.exists(clustermarkers_folder)) {
+  dir.create(clustermarkers_folder, recursive = TRUE)
 }
 
 ## ====================================================
@@ -63,13 +63,13 @@ if (!cluster_col %in% colnames(seurat_obj@meta.data)) {
 
 ## ===========================================================
 # cell type specific markers
-print("Saving cell type specific markers...")
+print("Saving cluster specific markers...")
 # Extract cell type specific markers
 cell_type_markers <- FindAllMarkers(seurat_obj, group.by =  cluster_col)
 # Convert to data.table
 cell_type_markers_dt <- as.data.table(cell_type_markers)
 # Save to CSV
-fwrite(cell_type_markers_dt, paste0(celltypemarkers_folder,"/celltype_FindAllMarkers.csv"), row.names = FALSE)
+fwrite(cell_type_markers_dt, paste0(clustermarkers_folder,"/cluster_FindAllMarkers.csv"), row.names = FALSE)
 
 ## ============================================================
 # Ecalcaulate differential expression within each cell type between the conditions # nolint
@@ -126,11 +126,11 @@ for (cell_type in cell_types) {
 	}
 }
 # Convert the list to a data.table
-de_results_dt <- rbindlist(de_results_list, idcol = "CellType_DE")
-de_results_topN_dt <- rbindlist(de_results_topN_list, idcol = "CellType_DE")
+de_results_dt <- rbindlist(de_results_list, idcol = "cluster_DE")
+de_results_topN_dt <- rbindlist(de_results_topN_list, idcol = "cluster_DE")
 # Save to CSV
-fwrite(de_results_dt, paste0(celltypemarkers_folder, "/celltype_DEGs.csv"), row.names = FALSE)
-fwrite(de_results_topN_dt, paste0(celltypemarkers_folder, "/celltype_DEGs_top10.csv"), row.names = FALSE)
+fwrite(de_results_dt, paste0(clustermarkers_folder, "/cluster_DEGs.csv"), row.names = FALSE)
+fwrite(de_results_topN_dt, paste0(clustermarkers_folder, "/cluster_DEGs_topN.csv"), row.names = FALSE)
 
 
 ## ============================================================
@@ -147,11 +147,11 @@ metadata = pb_obj@meta.data
 colnames(metadata)[colnames(metadata) == sample_col] <- "sampleId"
 colnames(metadata)[colnames(metadata) == condition_col] <- "condition"
 
-write.csv(metadata, paste0(celltypemarkers_folder, "/metadata_sample_celltype_condition.csv"), row.names = FALSE)
+write.csv(metadata, paste0(clustermarkers_folder, "/metadata_sample_cluster_condition.csv"), row.names = FALSE)
 
 expr_matrix <- GetAssayData(pb_obj, assay = "RNA", slot = "data")
 colnames(expr_matrix) <- gsub("-", "_", colnames(expr_matrix))
-write.csv(expr_matrix, paste0(celltypemarkers_folder, "/pb_expr_matrix.csv"), row.names = TRUE)
+write.csv(expr_matrix, paste0(clustermarkers_folder, "/pb_expr_matrix.csv"), row.names = TRUE)
 
 
 # Define the cell types
@@ -208,11 +208,11 @@ for (cell_type in cell_types) {
 	}
 }
 # Convert the list to a data.table
-pseudo_bulk_dt <- rbindlist(pseudo_bulk_list, idcol = "CellType_DE")
-pseudo_bulk_topN_dt <- rbindlist(pseudo_bulk_topN_list, idcol = "CellType_DE")
+pseudo_bulk_dt <- rbindlist(pseudo_bulk_list, idcol = "cluster_DE")
+pseudo_bulk_topN_dt <- rbindlist(pseudo_bulk_topN_list, idcol = "cluster_DE")
 # Save to CSV
-fwrite(pseudo_bulk_dt, paste0(celltypemarkers_folder, "/celltype_pseudobulk_DEGs.csv"), row.names = FALSE)
-fwrite(pseudo_bulk_topN_dt, paste0(celltypemarkers_folder, "/celltype_pseudobulk_DEGs_top10.csv"), row.names = FALSE)
+fwrite(pseudo_bulk_dt, paste0(clustermarkers_folder, "/cluster_pseudobulk_DEGs.csv"), row.names = FALSE)
+fwrite(pseudo_bulk_topN_dt, paste0(clustermarkers_folder, "/cluster_pseudobulk_DEGs_topN.csv"), row.names = FALSE)
 
 pooled_topN_DEGs = pseudo_bulk_topN_dt$gene
 ## remove duplicates
@@ -220,10 +220,10 @@ pooled_topN_DEGs <- unique(pooled_topN_DEGs)
 ## subset expr_matrix to only include pooled_topN_DEGs
 expr_matrix_pooled_topN_DGEs <- expr_matrix[pooled_topN_DEGs, ]
 ## save the pooled_topN_DEGs expression matrix
-write.csv(expr_matrix_pooled_topN_DGEs, paste0(celltypemarkers_folder, "/pb_expr_matrix_topN_DEGs.csv"), row.names = TRUE)
+write.csv(expr_matrix_pooled_topN_DGEs, paste0(clustermarkers_folder, "/pb_expr_matrix_topN_DEGs.csv"), row.names = TRUE)
 
 
-cat("Done! Celltype markers is done! ^_^ ...\n")
+cat("Done! cluster markers is done! ^_^ ...\n")
 
 
 

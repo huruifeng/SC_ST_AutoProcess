@@ -130,17 +130,10 @@ with open(f"{dataset_path}/dataset_info.toml", "w") as f:
 print("==================================================")
 print("Running R script...Cell type markers...")
 ## run the R script
-with open(f"{dataset_path}/celltype_markers.log", "w") as log_file:
-    if dataset_type.lower() in ["scrnaseq", "snrnaseq"]:
+with open(f"{dataset_path}/cluster_markers.log", "w") as log_file:
+    if dataset_type.lower() in ["scrnaseq", "snrnaseq","visiumst"]:
         process = subprocess.Popen(
-            ["Rscript", "celltypemarkers_SC.R", seurat_path, dataset_path, main_cluster_column, condition_column, sample_id_column],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,  # get string output, not bytes
-        )
-    elif dataset_type.lower() in ["visiumst"]:
-        process = subprocess.Popen(
-            ["Rscript", "celltypemarkers_Visium.R", seurat_path, dataset_path, main_cluster_column, condition_column, sample_id_column],
+            ["Rscript", "clustermarkers.R", seurat_path, dataset_path, main_cluster_column, condition_column, sample_id_column],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,  # get string output, not bytes
