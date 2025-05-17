@@ -26,6 +26,13 @@ cluster_col <- args[3]
 condition_col <- args[4]
 sample_col <- args[5]
 
+# seurat_obj_file <- "Seurats/DietFullIntegration_Oct2023_FinalOSR_6HC_MTG_FebCA_MajorMarkersUpdated2.rds"
+# output_dir <- "datasets/PD5D_MTG_snRNAseq"
+# cluster_col <- "Complex_Assignment"
+# condition_col <- "case"
+# sample_col <- "sample_id"
+
+
 clustermarkers_folder = paste0(output_dir, "/clustermarkers")
 if (!dir.exists(clustermarkers_folder)) {
   dir.create(clustermarkers_folder, recursive = TRUE)
@@ -85,7 +92,7 @@ for (cell_type in cell_types) {
 	# Print the current cell type # nolint: whitespace_linter, indentation_linter.
 	print(paste("Processing cell type:", cell_type))
 	# Subset the Seurat object to the current cell type # nolint
-	subset_obj <- seurat_obj[, seurat_obj@meta.data[[meta_col]] == cell_type]
+	subset_obj <- seurat_obj[, seurat_obj@meta.data[[cluster_col]] == cell_type]
 
 	# Calculate differential expression between conditions
 	condition_ls <- unique(seurat_obj@meta.data[[condition_col]])
@@ -132,7 +139,6 @@ de_results_topN_dt <- rbindlist(de_results_topN_list, idcol = "cluster_DE")
 fwrite(de_results_dt, paste0(clustermarkers_folder, "/cluster_DEGs.csv"), row.names = FALSE)
 fwrite(de_results_topN_dt, paste0(clustermarkers_folder, "/cluster_DEGs_topN.csv"), row.names = FALSE)
 
-
 ## ============================================================
 # pseudo-bulk DE analysis in each cell type
 print("Calculating pseudo-bulk analysis...")
@@ -140,7 +146,8 @@ print("Calculating pseudo-bulk analysis...")
 # pb_obj <- AggregateExpression(seurat_obj, assays = "RNA", slot = "counts", return.seurat = T, group.by = c("sample_id", "MajorCellTypes", "case"))
 pb_obj <- PseudobulkExpression(seurat_obj,assays = "RNA", layer = "counts", method= "aggregate", return.seurat = T, group.by = c(sample_col, cluster_col, condition_col))
 
-pb_obj[[col_name]] <- gsub("-", "_", pb_obj[[col_name]])
+pb_obj@meta.data[[cluster_col]] <- gsub("-", "_", pb_obj@meta.data[[cluster_col]])
+pb_obj@meta.data[["orig.ident"]] <- gsub("-", "_", pb_obj@meta.data[["orig.ident"]])
 
 metadata = pb_obj@meta.data
 ## rename sample_id to sampleId
@@ -149,7 +156,7 @@ colnames(metadata)[colnames(metadata) == condition_col] <- "condition"
 
 write.csv(metadata, paste0(clustermarkers_folder, "/metadata_sample_cluster_condition.csv"), row.names = FALSE)
 
-expr_matrix <- GetAssayData(pb_obj, assay = "RNA", slot = "data")
+expr_matrix <- GetAssayData(pb_obj, assay = "RNA", layer = "data")
 colnames(expr_matrix) <- gsub("-", "_", colnames(expr_matrix))
 write.csv(expr_matrix, paste0(clustermarkers_folder, "/pb_expr_matrix.csv"), row.names = TRUE)
 
@@ -165,7 +172,7 @@ for (cell_type in cell_types) {
 	# Print the current cell type # nolint: whitespace_linter, indentation_linter.
 	print(paste("Processing cell type:", cell_type))
 	# Subset the Seurat object to the current cell type # nolint
-	subset_obj <- pb_obj[, pb_obj@meta.data[[meta_col]] == cell_type]
+	subset_obj <- pb_obj[, pb_obj@meta.data[[cluster_col]] == cell_type]
 
 	# Calculate differential expression between conditions
 	# Here, we assume that the conditions are stored in the "Condition" metadata column 
@@ -221,7 +228,6 @@ pooled_topN_DEGs <- unique(pooled_topN_DEGs)
 expr_matrix_pooled_topN_DGEs <- expr_matrix[pooled_topN_DEGs, ]
 ## save the pooled_topN_DEGs expression matrix
 write.csv(expr_matrix_pooled_topN_DGEs, paste0(clustermarkers_folder, "/pb_expr_matrix_topN_DEGs.csv"), row.names = TRUE)
-
 
 cat("Done! cluster markers is done! ^_^ ...\n")
 
