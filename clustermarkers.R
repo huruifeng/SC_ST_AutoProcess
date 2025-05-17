@@ -28,7 +28,7 @@ sample_col <- args[5]
 
 # seurat_obj_file <- "Seurats/DietFullIntegration_Oct2023_FinalOSR_6HC_MTG_FebCA_MajorMarkersUpdated2.rds"
 # output_dir <- "datasets/PD5D_MTG_snRNAseq"
-# cluster_col <- "Complex_Assignment"
+# cluster_col <- "SubCellTypes"
 # condition_col <- "case"
 # sample_col <- "sample_id"
 

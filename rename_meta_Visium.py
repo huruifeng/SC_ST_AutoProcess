@@ -14,14 +14,12 @@ print("============================================")
 # Get the arguments
 dataset_path = sys.argv[1]
 kept_features = sys.argv[2].split(",")
-rename_features = json.loads(sys.argv[3])
 sample_col = sys.argv[4]
 cluster_col = sys.argv[5]
 condition_col = sys.argv[6]
 print("============================================")
 print("Dataset path: ", dataset_path)
 print("Kept features: ", kept_features)
-print("Rename features: ", rename_features)
 print("Sample column: ", sample_col)
 print("Cluster column: ", cluster_col)
 print("Condition column: ", condition_col)
@@ -34,21 +32,11 @@ if cluster_col not in kept_features:
 if condition_col not in kept_features:
     kept_features.append(condition_col)
 
-for feature in rename_features:
-    if feature not in kept_features:
-        print(f"Feature {feature} not in kept features. Exiting...")
-        exit(1)
 
 print("Loading metadata...")
 metadata = pd.read_csv(dataset_path + "/raw_metadata.csv", index_col=0, header=0)
 metadata = metadata.loc[:, kept_features]
 
-## rename features
-print("Renaming features...")
-for feature in rename_features:
-    metadata = metadata.rename(columns={feature: rename_features[feature]})
-    kept_features.remove(feature)
-    kept_features.append(rename_features[feature])
 
 metadata = metadata.rename(columns={condition_col: "Condition"})
 kept_features.remove(condition_col)

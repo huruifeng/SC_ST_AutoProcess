@@ -22,6 +22,8 @@ if (length(args) != 2) {
 # Get the arguments
 seurat_obj_file <- args[1]
 output_dir <- args[2]
+cluster_col <- args[3]
+
 
 # Check if the output directory exists, if not create it
 if (!dir.exists(output_dir)) {
@@ -56,6 +58,11 @@ if (!"meta.data" %in% slotNames(seurat_obj)) {
 ## Check if the Seurat object has the necessary umap embedding
 if (!"umap" %in% names(seurat_obj@reductions)) {
   stop("The Seurat object does not contain the 'umap' reduction.")
+}
+
+# Check if the cluster column exists in the metadata
+if (!cluster_col %in% colnames(seurat_obj@meta.data)) {
+  stop(paste("The cluster column", cluster_col, "does not exist in the metadata."))
 }
 
 ## ===================================================
