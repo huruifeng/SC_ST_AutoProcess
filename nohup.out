@@ -100,3 +100,25 @@ Grouping by gene... be patient...
 34000/35018
 35000/35018
 Done! Feature/Gene data processed and saved.
+Loading toml file...
+Checking toml file...[Seurat]
+Checking toml file...[Dataset]
+Checking toml file...[Meta Features]
+=================================================
+Running python script...Prepare meta data...
+Selected features: nCount_RNA,nFeature_RNA,sex,MajorCellTypes,updrs,SubCellTypes,mmse,sample_id,case
+============================================
+============================================
+Dataset path:  datasets/PD5D_MTG_snRNAseq
+Kept features:  ['nCount_RNA', 'nFeature_RNA', 'sex', 'MajorCellTypes', 'updrs', 'SubCellTypes', 'mmse', 'sample_id', 'case']
+Sample column:  sample_id
+Cluster column:  SubCellTypes
+Condition column:  case
+Checking inputs...
+Loading metadata...
+Renaming cell id...
+Processing cell metadata...
+Traceback (most recent call last):
+  File "/mnt/data/projects/donglab/ruifeng_2025/SC_ST_AutoProcess/rename_meta_SC.py", line 127, in <module>
+    stop
+NameError: name 'stop' is not defined

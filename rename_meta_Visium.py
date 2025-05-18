@@ -96,6 +96,9 @@ for feature in kept_features:
 
 spot_meta_list = spot_level_features
 metadata_lite = metadata.loc[:, spot_meta_list]
+
+metadata_lite.to_csv(dataset_path + "/cellspot_metadata_original.csv")
+
 spot_meta_mapping = {}
 for spot_meta in spot_meta_list:
     # Check if the column is categorical

@@ -15,6 +15,7 @@ sex_col = "sex"
 
 
 output_folder = dataset_folder + "/clustermarkers"
+
 marker_gene_file = output_folder + "/cluster_FindAllMarkers.csv"
 marker_genes = pd.read_csv(marker_gene_file, index_col=None, header=0)
 

@@ -18,12 +18,12 @@ sample_col = sys.argv[3]
 cluster_col = sys.argv[4]
 condition_col = sys.argv[5]
 
-print("============================================")
 print("Dataset path: ", dataset_path)
 print("Kept features: ", kept_features)
 print("Sample column: ", sample_col)
 print("Cluster column: ", cluster_col)
 print("Condition column: ", condition_col)
+print("============================================")
 
 # %% ==============================
 
@@ -99,6 +99,9 @@ for feature in kept_features:
 
 cell_meta_list = cell_level_features
 metadata_lite = metadata.loc[:, cell_meta_list]
+
+metadata_lite.to_csv(dataset_path + "/cellspot_metadata_original.csv")
+
 cell_meta_mapping = {}
 for cell_meta in cell_meta_list:
     # Check if the column is categorical
