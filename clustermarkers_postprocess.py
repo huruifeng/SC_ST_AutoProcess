@@ -48,7 +48,7 @@ with open(output_folder + "/cluster_markergenes.json", "w") as f:
 # %%============================================================================
 pool_genes = top_genes["gene"].unique().tolist()
 cluster_list = top_genes["cluster"].unique().tolist()
-metadata = pd.read_csv(dataset_folder + "/raw_metadata.csv", index_col=0, header=0)
+metadata = pd.read_csv(dataset_folder + "/cellspot_metadata_original.csv", index_col=0, header=0)
 
 #%% ============================================================================
 ## calculate the percentage of cells where the gene is detected in that cell type
