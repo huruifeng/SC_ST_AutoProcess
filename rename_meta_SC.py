@@ -87,6 +87,10 @@ with open(f"{dataset_path}/cellspot_to_sample.json", "w") as f:
 # %% ==============================================
 ## Process cell metadata
 print("Processing cell metadata...")
+
+## save original metadata
+metadata.loc[:,kept_features].to_csv(dataset_path + "/cellspot_metadata_original.csv")
+
 sample_level_features = []
 cell_level_features = []
 sample_groups = metadata.groupby("sample_id")
@@ -99,8 +103,6 @@ for feature in kept_features:
 
 cell_meta_list = cell_level_features
 metadata_lite = metadata.loc[:, cell_meta_list]
-
-metadata_lite.to_csv(dataset_path + "/cellspot_metadata_original.csv")
 
 cell_meta_mapping = {}
 for cell_meta in cell_meta_list:

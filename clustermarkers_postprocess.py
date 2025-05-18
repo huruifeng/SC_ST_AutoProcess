@@ -10,7 +10,7 @@ import numpy as np
 ## top 10 marker genes in each cell type
 dataset_folder = "datasets/PD5D_MTG_snRNAseq"
 cluster_col = "SubCellTypes"
-condition_col = "case"
+condition_col = "Condition"
 sex_col = "sex"
 
 
