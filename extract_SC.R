@@ -15,7 +15,7 @@ library(presto)
 cat("===================================================\n")
 # Check if the script is run with the correct number of arguments
 args <- commandArgs(trailingOnly = TRUE)
-if (length(args) != 2) {
+if (length(args) != 3) {
   stop("Please provide the Seurat object file and output directory as arguments.")
 }
 

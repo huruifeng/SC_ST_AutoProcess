@@ -14,9 +14,9 @@ print("============================================")
 # Get the arguments
 dataset_path = sys.argv[1]
 kept_features = sys.argv[2].split(",")
-sample_col = sys.argv[4]
-cluster_col = sys.argv[5]
-condition_col = sys.argv[6]
+sample_col = sys.argv[3]
+cluster_col = sys.argv[4]
+condition_col = sys.argv[5]
 print("============================================")
 print("Dataset path: ", dataset_path)
 print("Kept features: ", kept_features)

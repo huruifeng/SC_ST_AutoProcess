@@ -1,0 +1,102 @@
+Loading toml file...
+Checking toml file...[Seurat]
+Checking toml file...[Dataset]
+Checking toml file...[Meta Features]
+=================================================
+Running python script...Prepare meta data...
+Selected features: nCount_RNA,nFeature_RNA,sex,MajorCellTypes,updrs,SubCellTypes,mmse,sample_id,case
+============================================
+============================================
+Dataset path:  datasets/PD5D_MTG_snRNAseq
+Kept features:  ['nCount_RNA', 'nFeature_RNA', 'sex', 'MajorCellTypes', 'updrs', 'SubCellTypes', 'mmse', 'sample_id', 'case']
+Sample column:  sample_id
+Cluster column:  SubCellTypes
+Condition column:  case
+Checking inputs...
+Loading metadata...
+Renaming cell id...
+Processing cell metadata...
+Processing sample metadata...
+/mnt/data/projects/donglab/ruifeng_2025/SC_ST_AutoProcess/rename_meta_SC.py:129: FutureWarning: Setting an item of incompatible dtype is deprecated and will raise an error in a future version of pandas. Value '' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  sample_meta.fillna("", inplace=True)
+Loading embedding ....
+Renaming embeddings....
+Sampling umap...
+Loading expression data...(Takes a while...be patient...)
+Renaming expression....
+Grouping by gene... be patient...
+Saving gene jsons...
+Saving gene... be patient...
+1000/35018
+2000/35018
+3000/35018
+4000/35018
+5000/35018
+6000/35018
+7000/35018
+8000/35018
+9000/35018
+10000/35018
+11000/35018
+12000/35018
+13000/35018
+14000/35018
+15000/35018
+16000/35018
+17000/35018
+18000/35018
+19000/35018
+20000/35018
+21000/35018
+22000/35018
+23000/35018
+24000/35018
+25000/35018
+26000/35018
+27000/35018
+28000/35018
+29000/35018
+30000/35018
+31000/35018
+32000/35018
+33000/35018
+34000/35018
+35000/35018
+Calculating pseudo count...
+Grouping by gene... be patient...
+1000/35018
+2000/35018
+3000/35018
+4000/35018
+5000/35018
+6000/35018
+7000/35018
+8000/35018
+9000/35018
+10000/35018
+11000/35018
+12000/35018
+13000/35018
+14000/35018
+15000/35018
+16000/35018
+17000/35018
+18000/35018
+19000/35018
+20000/35018
+21000/35018
+22000/35018
+23000/35018
+24000/35018
+25000/35018
+26000/35018
+27000/35018
+28000/35018
+29000/35018
+30000/35018
+31000/35018
+32000/35018
+33000/35018
+34000/35018
+35000/35018
+Done! Feature/Gene data processed and saved.

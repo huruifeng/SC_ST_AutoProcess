@@ -13,11 +13,10 @@ print("============================================")
 # %% ==============================
 # Get the arguments
 dataset_path = sys.argv[1]
-# dataset_name = "SC_data"
 kept_features = sys.argv[2].split(",")
-sample_col = sys.argv[4]
-cluster_col = sys.argv[5]
-condition_col = sys.argv[6]
+sample_col = sys.argv[3]
+cluster_col = sys.argv[4]
+condition_col = sys.argv[5]
 
 print("============================================")
 print("Dataset path: ", dataset_path)
@@ -25,6 +24,7 @@ print("Kept features: ", kept_features)
 print("Sample column: ", sample_col)
 print("Cluster column: ", cluster_col)
 print("Condition column: ", condition_col)
+
 # %% ==============================
 
 print("Checking inputs...")
