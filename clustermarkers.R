@@ -15,8 +15,8 @@ library(presto)
 cat("===================================================\n")
 # Check if the script is run with the correct number of arguments
 args <- commandArgs(trailingOnly = TRUE)
-if (length(args) != 5) {
-	stop("Please provide the arguments.")
+if (length(args) != 6) {
+	stop("Please provide the correct arguments.")
 }
 
 # Get the arguments
@@ -25,6 +25,8 @@ output_dir <- args[2]
 cluster_col <- args[3]
 condition_col <- args[4]
 sample_col <- args[5]
+seurat_type <- args[6]
+
 
 # seurat_obj_file <- "Seurats/DietFullIntegration_Oct2023_FinalOSR_6HC_MTG_FebCA_MajorMarkersUpdated2.rds"
 # output_dir <- "datasets/PD5D_MTG_snRNAseq"
@@ -47,15 +49,35 @@ seurat_obj <- readRDS(seurat_obj_file)
 if (!inherits(seurat_obj, "Seurat")) {
   stop("The provided file is not a valid Seurat object.")
 }
+if(seurat_type == "scrnaseq" | seurat_type == "snrnaseq"){
+	  # Check if the Seurat object has the necessary assay
+	if (!"RNA" %in% names(seurat_obj@assays)) {
+		stop("The Seurat object does not contain the 'RNA' assay.")
+	}
+	# Check if the Seurat object has the necessary assay data
+	if (!"data" %in% slotNames(seurat_obj@assays$RNA)) {
+		stop("The Seurat object does not contain the 'data' slot in the 'RNA' assay.")
+	}
+	} else if (seurat_type == "snATACseq") {
+	# Check if the Seurat object has the necessary assay
+	if (!"ATAC" %in% names(seurat_obj@assays)) {
+		stop("The Seurat object does not contain the 'ATAC' assay.")
+	}
+	# Check if the Seurat object has the necessary assay data
+	if (!"counts" %in% slotNames(seurat_obj@assays$ATAC)) {
+		stop("The Seurat object does not contain the 'counts' slot in the 'ATAC' assay.")
+	}
+} else if (seurat_type == "visiumst") {
+	# Check if the Seurat object has the necessary assay
+	if (!"Spatial" %in% names(seurat_obj@assays)) {
+		stop("The Seurat object does not contain the 'Spatial' assay.")
+	}
+	# Check if the Seurat object has the necessary assay data
+	if (!"data" %in% slotNames(seurat_obj@assays$Spatial)) {
+		stop("The Seurat object does not contain the 'data' slot in the 'Spatial' assay.")
+	}
+}
 
-# Check if the Seurat object has the necessary assay
-if (!"RNA" %in% names(seurat_obj@assays)) {
-  stop("The Seurat object does not contain the 'RNA' assay.")
-}
-# Check if the Seurat object has the necessary assay data
-if (!"data" %in% slotNames(seurat_obj@assays$RNA)) {
-  stop("The Seurat object does not contain the 'data' slot in the 'RNA' assay.")
-}
 
 # Check if the Seurat object has the necessary metadata
 if (!"meta.data" %in% slotNames(seurat_obj)) {
@@ -144,7 +166,20 @@ fwrite(de_results_topN_dt, paste0(clustermarkers_folder, "/cluster_DEGs_topN.csv
 print("Calculating pseudo-bulk analysis...")
 # Create a new Seurat object for pseudo-bulk analysis
 # pb_obj <- AggregateExpression(seurat_obj, assays = "RNA", slot = "counts", return.seurat = T, group.by = c("sample_id", "MajorCellTypes", "case"))
-pb_obj <- PseudobulkExpression(seurat_obj,assays = "RNA", layer = "counts", method= "aggregate", return.seurat = T, group.by = c(sample_col, cluster_col, condition_col))
+if(seurat_type == "scrnaseq" | seurat_type == "snrnaseq"){
+	## use the RNA assay
+	assay = "RNA"
+} else if (seurat_type == "snATACseq") {
+	## use the ATAC assay
+	assay = "ATAC"
+} else if (seurat_type == "visiumst") {
+	## use the Spatial assay
+	assay = "Spatial"
+} else {
+	stop("Invalid seurat_type. Please choose from 'scrnaseq', 'snrnaseq', 'snATACseq', or 'visiumst'.")
+}
+## use the counts assay
+pb_obj <- PseudobulkExpression(seurat_obj,assays = assay, layer = "counts", method= "aggregate", return.seurat = T, group.by = c(sample_col, cluster_col, condition_col))
 
 pb_obj@meta.data[[cluster_col]] <- gsub("-", "_", pb_obj@meta.data[[cluster_col]])
 pb_obj@meta.data[["orig.ident"]] <- gsub("-", "_", pb_obj@meta.data[["orig.ident"]])
@@ -156,7 +191,7 @@ colnames(metadata)[colnames(metadata) == condition_col] <- "condition"
 
 write.csv(metadata, paste0(clustermarkers_folder, "/metadata_sample_cluster_condition.csv"), row.names = FALSE)
 
-expr_matrix <- GetAssayData(pb_obj, assay = "RNA", layer = "data")
+expr_matrix <- GetAssayData(pb_obj, assay = assay, layer = "data")
 colnames(expr_matrix) <- gsub("-", "_", colnames(expr_matrix))
 write.csv(expr_matrix, paste0(clustermarkers_folder, "/pb_expr_matrix.csv"), row.names = TRUE)
 

@@ -6,7 +6,7 @@ import subprocess
 ## ==============================================================
 print("Loading toml file...")
 # Check if the toml file exists
-toml_file = "sc_dataset_info.toml"
+toml_file = "visium_dataset_info.toml"
 if not os.path.exists(toml_file):
     print(f"File {toml_file} not found.")
     exit(1)
@@ -91,36 +91,36 @@ if not os.path.exists(dataset_path):
 with open(f"{dataset_path}/dataset_info.toml", "w") as f:
     toml.dump(toml_data, f)
 
-## ==============================================================
-print("==================================================")
-print("Running R script...Extract Seurat data...")
-## run the R script
-with open(f"{dataset_path}/extract_seurat_output.log", "w") as log_file:
-    if dataset_type.lower() in ["scrnaseq", "snrnaseq"]:
-        process = subprocess.Popen(
-            ["Rscript", "extract_SC.R", seurat_path, dataset_path, main_cluster_column],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,  # get string output, not bytes
-        )
-    elif dataset_type.lower() in ["visiumst"]:
-        process = subprocess.Popen(
-            ["Rscript", "extract_Visium.R", seurat_path, dataset_path, main_cluster_column],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,  # get string output, not bytes
-        )
-    else:
-        print(f"Invalid dataset type {dataset_type} found in the toml file.")
-        exit(1)
+# ## ==============================================================
+# print("==================================================")
+# print("Running R script...Extract Seurat data...")
+# ## run the R script
+# with open(f"{dataset_path}/extract_seurat_output.log", "w") as log_file:
+#     if dataset_type.lower() in ["scrnaseq", "snrnaseq"]:
+#         process = subprocess.Popen(
+#             ["Rscript", "extract_SC.R", seurat_path, dataset_path, main_cluster_column],
+#             stdout=subprocess.PIPE,
+#             stderr=subprocess.STDOUT,
+#             text=True,  # get string output, not bytes
+#         )
+#     elif dataset_type.lower() in ["visiumst"]:
+#         process = subprocess.Popen(
+#             ["Rscript", "extract_Visium.R", seurat_path, dataset_path, main_cluster_column],
+#             stdout=subprocess.PIPE,
+#             stderr=subprocess.STDOUT,
+#             text=True,  # get string output, not bytes
+#         )
+#     else:
+#         print(f"Invalid dataset type {dataset_type} found in the toml file.")
+#         exit(1)
 
-    # Stream output live
-    for line in process.stdout:
-        print(line, end="")         # print to terminal
-        log_file.write(line)        # write to log file
-        log_file.flush()            # ensure it’s written immediately
+#     # Stream output live
+#     for line in process.stdout:
+#         print(line, end="")         # print to terminal
+#         log_file.write(line)        # write to log file
+#         log_file.flush()            # ensure it’s written immediately
 
-    process.wait()
+#     process.wait()
 
 
 ## ==============================================================
@@ -130,7 +130,7 @@ print("Running R script...Cell type markers...")
 with open(f"{dataset_path}/cluster_markers.log", "w") as log_file:
     if dataset_type.lower() in ["scrnaseq", "snrnaseq","visiumst"]:
         process = subprocess.Popen(
-            ["Rscript", "clustermarkers.R", seurat_path, dataset_path, main_cluster_column, condition_column, sample_id_column],
+            ["Rscript", "clustermarkers.R", seurat_path, dataset_path, main_cluster_column, condition_column, sample_id_column, dataset_type.lower()],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,  # get string output, not bytes
@@ -149,34 +149,34 @@ with open(f"{dataset_path}/cluster_markers.log", "w") as log_file:
 
 ## ==============================================================
 print("=================================================")
-print("Running python script...Prepare meta data...")
-## run the python script
-print("Selected features:", ",".join(selected_features))
-with open(f"{dataset_path}/prepare_meta_output.log", "w") as log_file:
-    if dataset_type.lower() in ["scrnaseq", "snrnaseq"]:
-        process_py = subprocess.Popen(
-            ["python3", "rename_meta_SC.py",dataset_path, ",".join(selected_features), sample_id_column, main_cluster_column, condition_column],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,  # get string output, not bytes
-        )
-    elif dataset_type.lower() in ["visiumst"]:
-        process_py = subprocess.Popen(
-            ["python3", "rename_meta_Visium.py",dataset_path, ",".join(selected_features), sample_id_column, main_cluster_column, condition_column],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,  # get string output, not bytes
-        )
-    else:
-        print(f"Invalid dataset type {dataset_type} found in the toml file.")
-        exit(1)
-    # Stream output live
-    for line in process_py.stdout:
-        print(line, end="")         # print to terminal
-        log_file.write(line)        # write to log file
-        log_file.flush()            # ensure it’s written immediately
+# print("Running python script...Prepare meta data...")
+# ## run the python script
+# print("Selected features:", ",".join(selected_features))
+# with open(f"{dataset_path}/prepare_meta_output.log", "w") as log_file:
+#     if dataset_type.lower() in ["scrnaseq", "snrnaseq"]:
+#         process_py = subprocess.Popen(
+#             ["python3", "rename_meta_SC.py",dataset_path, ",".join(selected_features), sample_id_column, main_cluster_column, condition_column],
+#             stdout=subprocess.PIPE,
+#             stderr=subprocess.STDOUT,
+#             text=True,  # get string output, not bytes
+#         )
+#     elif dataset_type.lower() in ["visiumst"]:
+#         process_py = subprocess.Popen(
+#             ["python3", "rename_meta_Visium.py",dataset_path, ",".join(selected_features), sample_id_column, main_cluster_column, condition_column],
+#             stdout=subprocess.PIPE,
+#             stderr=subprocess.STDOUT,
+#             text=True,  # get string output, not bytes
+#         )
+#     else:
+#         print(f"Invalid dataset type {dataset_type} found in the toml file.")
+#         exit(1)
+#     # Stream output live
+#     for line in process_py.stdout:
+#         print(line, end="")         # print to terminal
+#         log_file.write(line)        # write to log file
+#         log_file.flush()            # ensure it’s written immediately
 
-    process_py.wait()
+#     process_py.wait()
 
 ## ==============================================================
 

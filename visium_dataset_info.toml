@@ -40,9 +40,6 @@ data_processing_summary = ""
 protocols_io_DOI = ""
 other_reference = ""
 
-[meta_features.rename_features]
-## e.g., Complex_Assignment = "SubCellTypes"
-
 [meta_features]
 selected_features = ["nCount_Spatial","nFeature_Spatial","sample_name","sex","diagnosis","last_mmse_test_score","motor_updrs_score","smoothed_label_s5"]
 sample_id_column = "sample_name"
