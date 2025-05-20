@@ -48,6 +48,7 @@ main_cluster_column = "SubCellTypes"
 condition_column = "case"
 
 
-[visium]
-visium_default_features = []
-visium_default_samples = []
+[visium_defaults]
+samples = [ "BN2023", "BN1076",]
+features = [ "smoothed_label_s5"]
+genes = ["SNCA"]

@@ -38,7 +38,7 @@ top_genes = (
 )
 
 # Save or inspect the result
-top_genes.loc[:,["cluster","gene","avg_log2FC","p_val_adj"]].to_csv(output_folder+'/topN_genes_per_cluster.csv', index=False)
+top_genes.loc[:,["cluster","gene","avg_log2FC","p_val_adj"]].to_csv(output_folder+'/cluster_markergenes_TopN.csv', index=False)
 
 ## save marker genes of each cell type into a dictionary
 marker_genes_dict = defaultdict(list)
