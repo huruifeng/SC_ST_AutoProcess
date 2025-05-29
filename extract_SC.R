@@ -41,7 +41,7 @@ if (!inherits(seurat_obj, "Seurat")) {
 }
 capture.output(str(seurat_obj), file = paste0(output_dir, "/seurat_obj_structure.txt"))
 
-# seurat_obj@meta.data$SubCellTypes <- seurat_obj@meta.data$Complex_Assignment
+seurat_obj@meta.data$SubCellTypes <- paste0("(",seurat_obj@meta.data$MajorCellTypes,")",seurat_obj@meta.data$Complex_Assignment)
 
 # Check if the Seurat object has the necessary assay
 if (!"RNA" %in% names(seurat_obj@assays)) {
