@@ -92,7 +92,9 @@ if (!cluster_col %in% colnames(seurat_obj@meta.data)) {
 
 ## ===========================================================
 # cell type specific markers
-print("Saving cluster specific markers...")
+print("=====================================================")
+print("Extracting cell type specific markers...")
+
 # Extract cell type specific markers
 cell_type_markers <- FindAllMarkers(seurat_obj, group.by =  cluster_col)
 # Convert to data.table
@@ -102,7 +104,9 @@ fwrite(cell_type_markers_dt, paste0(clustermarkers_folder,"/cluster_FindAllMarke
 
 ## ============================================================
 # Ecalcaulate differential expression within each cell type between the conditions # nolint
-print("Calculating differential expression...")
+print("=====================================================")
+print("Calculating differential expression within each cell type...")
+
 # Define the cell types
 cell_types <- unique(seurat_obj@meta.data[[cluster_col]])
 # Initialize an empty list to store results
@@ -162,8 +166,9 @@ fwrite(de_results_dt, paste0(clustermarkers_folder, "/cluster_DEGs.csv"), row.na
 fwrite(de_results_topN_dt, paste0(clustermarkers_folder, "/cluster_DEGs_topN.csv"), row.names = FALSE)
 
 ## ============================================================
+print("=====================================================")
 # pseudo-bulk DE analysis in each cell type
-print("Calculating pseudo-bulk analysis...")
+print("Calculating pseudo-bulk differential expression within each cell type...")
 # Create a new Seurat object for pseudo-bulk analysis
 # pb_obj <- AggregateExpression(seurat_obj, assays = "RNA", slot = "counts", return.seurat = T, group.by = c("sample_id", "MajorCellTypes", "case"))
 if(seurat_type == "scrnaseq" | seurat_type == "snrnaseq"){
