@@ -3,15 +3,21 @@ import pandas as pd
 import json
 from collections import defaultdict
 import os
+import sys
 import numpy as np
 
 
 # %% ============================================================================
 ## top 10 marker genes in each cell type
-dataset_folder = "datasets/PD5D_MTG_snRNAseq"
-cluster_col = "SubCellTypes"
-condition_col = "Condition"
-sex_col = "sex"
+dataset_folder = sys.argv[1]  # e.g. "datasets/PD5D_MTG_snRNAseq"
+cluster_col = sys.argv[2]  # e.g. "SubCellTypes"
+condition_col = sys.argv[3]  # e.g. "Condition"
+sex_col = sys.argv[4]  # e.g. "sex"
+
+# dataset_folder = "datasets/PD5D_MTG_snRNAseq"
+# cluster_col = "SubCellTypes"
+# condition_col = "Condition"
+# sex_col = "sex"
 
 # dataset_folder = "datasets/PD5D_MTG_VisiumST"
 # cluster_col = "smoothed_label_s5"

@@ -179,6 +179,33 @@ with open(f"{dataset_path}/prepare_meta_output.log", "w") as log_file:
     process_py.wait()
 
 ## ==============================================================
+print("=================================================")
+print("Running python script...Prepare cell count data...")
+## run the python script
+with open(f"{dataset_path}/prepare_cellcount_output.log", "w") as log_file:
+    if dataset_type.lower() in ["scrnaseq", "snrnaseq","visiumst"]:
+
+        process_py = subprocess.Popen(
+            ["python3", "41_clustermarkers_postprocess.py", dataset_path, main_cluster_column, condition_column, "sex"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,  # get string output, not bytes
+        )
+
+    else:
+        print(f"Invalid dataset type {dataset_type} found in the toml file.")
+        exit(1)
+
+    # Stream output live
+    for line in process_py.stdout:
+        print(line, end="")         # print to terminal
+        log_file.write(line)        # write to log file
+        log_file.flush()            # ensure it’s written immediately
+
+    process_py.wait()
+## ==============================================================
+print("Done! All scripts executed successfully.")
+
 
 
 
