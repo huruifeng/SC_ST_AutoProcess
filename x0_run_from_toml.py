@@ -98,14 +98,14 @@ print("Running R script...Extract Seurat data...")
 with open(f"{dataset_path}/extract_seurat_output.log", "w") as log_file:
     if dataset_type.lower() in ["scrnaseq", "snrnaseq"]:
         process = subprocess.Popen(
-            ["Rscript", "extract_SC.R", seurat_path, dataset_path, main_cluster_column],
+            ["Rscript", "11_extract_SC.R", seurat_path, dataset_path, main_cluster_column],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,  # get string output, not bytes
         )
     elif dataset_type.lower() in ["visiumst"]:
         process = subprocess.Popen(
-            ["Rscript", "extract_Visium.R", seurat_path, dataset_path, main_cluster_column],
+            ["Rscript", "11_extract_Visium.R", seurat_path, dataset_path, main_cluster_column],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,  # get string output, not bytes
@@ -130,7 +130,7 @@ print("Running R script...Cell type markers...")
 with open(f"{dataset_path}/cluster_markers.log", "w") as log_file:
     if dataset_type.lower() in ["scrnaseq", "snrnaseq","visiumst"]:
         process = subprocess.Popen(
-            ["Rscript", "clustermarkers.R", seurat_path, dataset_path, main_cluster_column, condition_column, sample_id_column, dataset_type.lower()],
+            ["Rscript", "21_clustermarkers.R", seurat_path, dataset_path, main_cluster_column, condition_column, sample_id_column, dataset_type.lower()],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,  # get string output, not bytes
@@ -155,14 +155,14 @@ print("Selected features:", ",".join(selected_features))
 with open(f"{dataset_path}/prepare_meta_output.log", "w") as log_file:
     if dataset_type.lower() in ["scrnaseq", "snrnaseq"]:
         process_py = subprocess.Popen(
-            ["python3", "rename_meta_SC.py",dataset_path, ",".join(selected_features), sample_id_column, main_cluster_column, condition_column],
+            ["python3", "31_rename_meta_SC.py",dataset_path, ",".join(selected_features), sample_id_column, main_cluster_column, condition_column],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,  # get string output, not bytes
         )
     elif dataset_type.lower() in ["visiumst"]:
         process_py = subprocess.Popen(
-            ["python3", "rename_meta_Visium.py",dataset_path, ",".join(selected_features), sample_id_column, main_cluster_column, condition_column],
+            ["python3", "31_rename_meta_Visium.py",dataset_path, ",".join(selected_features), sample_id_column, main_cluster_column, condition_column],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,  # get string output, not bytes
