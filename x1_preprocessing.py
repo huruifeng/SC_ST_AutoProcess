@@ -29,6 +29,6 @@ if not all(df["group"].isin(cluster_mapping.keys())):
 # %% ============================================================================
 ## if the vvalue in the cluster column is not in the cluster_mapping, keep it as is
 df["group"] = df["group"].apply(lambda x: cluster_mapping[x] if x in cluster_mapping else x)
-
+df.to_csv("Seurats/PrestoFindAllMarkersTop_renamed.tsv", sep="\t", index=False)
 
 # %%

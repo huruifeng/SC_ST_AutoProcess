@@ -6,22 +6,25 @@ import numpy as np
 
 
 #%% ============================================
-data_file = "Seurats/PrestoFindAllMarkersTop.tsv"
+data_file = "Seurats/PrestoFindAllMarkersTop_renamed.tsv"
 
 cluster_col = "group"
 gene_col = "feature"
 log2fc_col = "logFC"
 padj_col = "padj"
+avg_expr_col = "avgExpr"
 
 
-dataset_folder = "datasets/Test/PrestoFindAllMarkersTop"
+dataset_folder = "datasets/PD5D_MTG_snRNAseq"
 meta_cluster_col = "SubCellTypes"
 meta_condition_col = "Condition"
 meta_sex_col = "sex"
 
+output_folder = dataset_folder + "/clustermarkers"
+if os.path.exists(output_folder) is False:
+    os.makedirs(output_folder, exist_ok=True)
 
-if os.path.exists(dataset_folder) is False:
-    os.makedirs(dataset_folder, exist_ok=True)
+
 
 #%% ============================================
 # Load the data
@@ -44,7 +47,7 @@ df_top = df_top.rename(columns={
 df_top["avg_log2FC"] = df_top["avg_log2FC"].round(2)
 df_top["p_val_adj"] = df_top["p_val_adj"].round(2)
 ## save the top markers to a CSV file
-df_top.to_csv(dataset_folder + "/cluster_markergenes_TopN.csv", index=False)
+df_top.to_csv(output_folder + "/cluster_markergenes_TopN.csv", index=False)
 
 
 #%% ============================================
@@ -55,7 +58,7 @@ for cluster, group in df_top.groupby("cluster"):
     marker_genes_dict[cluster] = group[["gene", "avg_log2FC", "p_val_adj"]].values.tolist()
 
 # Save the markers dictionary to a JSON file
-with open(dataset_folder + "/cluster_markergenes.json", "w") as f:
+with open(output_folder + "/cluster_markergenes.json", "w") as f:
     json.dump(marker_genes_dict, f, indent=2)
 
 #%% ============================================
@@ -110,9 +113,18 @@ for cluster in cluster_list:
                 avg_expr = 0.00
             else:
                 avg_expr = round(avg_expr, 2)
-                
-        marker_genes[gene]["avg_expr"] = avg_expr
-        marker_genes[gene]["is_marker"] = gene[0] in marker_genes_dict[cluster]
+
+        if avg_expr_col != "" and avg_expr_col in df.columns:
+            sub_df = df[(df[cluster_col] == cluster) & (df[gene_col] == gene)]
+            if sub_df.empty:
+                pass  # If no sub_df, no action needed
+            else:
+                # Get the average expression value from the sub_df
+                avg_expr = sub_df[avg_expr_col].values[0]
+        else:
+            pass
+        marker_genes[gene]["avg_expr"] = round(avg_expr, 2)
+        marker_genes[gene]["is_marker"] = gene in [g[0] for g in marker_genes_dict[cluster]] 
         marker_genes[gene]["n_expr_cells"] = num_cells_with_gene_expr
     
     marker_df = pd.DataFrame.from_dict(marker_genes, orient='index')
@@ -123,8 +135,9 @@ for cluster in cluster_list:
 marker_genes_df["gene"] = marker_genes_df.index
 marker_genes_df = marker_genes_df.reset_index(drop=True)
 marker_genes_df = marker_genes_df[["gene", meta_cluster_col, "cluster_n_cells"] + [col for col in marker_genes_df.columns if col not in ["gene", meta_cluster_col, "cluster_n_cells"]]]  
-marker_genes_df.to_csv(dataset_folder + "/cluster_markergenes_cellcounts.csv", index=False)
+marker_genes_df.to_csv(output_folder + "/cluster_markergenes_cellcounts.csv", index=False)
 
 # Save the dictionary to a JSON file
-with open(dataset_folder + "/cluster_cellcounts.json", "w") as f:
+with open(output_folder + "/cluster_cellcounts.json", "w") as f:
     json.dump(pct_detected, f, indent=4)    
+# %%

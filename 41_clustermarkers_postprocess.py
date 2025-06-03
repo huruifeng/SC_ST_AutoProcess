@@ -112,7 +112,7 @@ for cluster in cluster_list:
             else:
                 avg_expr = round(avg_expr, 2)
         marker_genes[gene]["avg_expr"] = avg_expr
-        marker_genes[gene]["is_marker"] = gene[0] in marker_genes_dict[cluster]
+        marker_genes[gene]["is_marker"] = gene in [g[0] for g in marker_genes_dict[cluster]] 
         marker_genes[gene]["n_expr_cells"] = num_cells_with_gene_expr
     
     marker_df = pd.DataFrame.from_dict(marker_genes, orient='index')
