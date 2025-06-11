@@ -31,4 +31,23 @@ if not all(df["group"].isin(cluster_mapping.keys())):
 df["group"] = df["group"].apply(lambda x: cluster_mapping[x] if x in cluster_mapping else x)
 df.to_csv("Seurats/PrestoFindAllMarkersTop_renamed.tsv", sep="\t", index=False)
 
-# %%
+# %% ===========================================================================
+new_folder = "Seurats/complex_assignment_casewilcoxauc_renamed"
+if not os.path.exists(new_folder):
+    os.makedirs(new_folder)
+
+file_ls = os.listdir("Seurats/complex_assignment_casewilcoxauc")
+
+compares = ["ILBvsHC", "PDvsHC"]
+
+for file_i in file_ls:
+    for c in compares:
+        file_path = os.path.join("Seurats/complex_assignment_casewilcoxauc", file_i,file_i + "." + c + ".DE.csv")
+
+        if not os.path.exists(file_path):
+            print(f"File {file_path} does not exist, skipping.")
+            continue
+        df = pd.read_csv(file_path, sep=",", header=0)
+        df.to_csv(os.path.join(new_folder, cluster_mapping[file_i] + "." + c + ".csv"), sep=",", index=False)
+# %% ===========================================================================
+## merge all the files in the new_folder into a single file
