@@ -90,7 +90,7 @@ write.csv(umap_embeddings, file = paste0(output_dir, "/raw_umap_embeddings.csv")
 # Extract the normalized counts
 cat("Save normalized counts...\n")
 ## Extract normalized data
-normalized_counts <- seurat_obj@assays$RNA@data  # This is a sparse matrix
+normalized_counts <- seurat_obj@assays$RNA@layers$data  # This is a sparse matrix
 
 # Convert sparse matrix to triplet format (long format)
 long_data <- summary(normalized_counts)

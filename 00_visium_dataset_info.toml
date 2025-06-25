@@ -1,10 +1,9 @@
-[seurat]
-seurat_file = "comb_seurat_smoothed_V4_cell2loc_01222025.rds"
+[datasetfile]
+file = "comb_seurat_smoothed_V4_cell2loc_01222025.rds"
 datatype = "VisiumST"
 
 [dataset]
 dataset_name = "PD5D_MTG_VisiumST"
-assay = "VisiumST"
 description = ""
 PI_full_name = "Clemens Scherzer"
 PI_email = "clemens.scherzer@yale.edu"
@@ -16,9 +15,12 @@ other_funding_source = ""
 publication_DOI = ""
 publication_PMID = ""
 n_samples = 96
-brain_super_region = "temporallobe"
+brain_super_region = "Temporal Lobe"
 brain_region = "Middle temporal gyrus"
 sample_info = ""
+sample_sheet = ""
+disease = "PD"
+organism = "Homo Sapiens"
 
 [study]
 study_name = "Parkinson5D"

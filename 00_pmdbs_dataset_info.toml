@@ -1,0 +1,56 @@
+[datasetfile]
+file = "pmdbs_lee_obj_updated.rds"
+datatype = "snRNAseq"
+
+[dataset]
+dataset_name = "PMDBS_snRNAseq"
+description = "This dataset characterizes the neuropathological progression of PD with single-cell resolution, and determine the levels of senescence, as captured by a transcriptome signature. The data was produced from 75 samples derived from human PD and control post-mortem brains. The brain regions sampled include the hippocampus, middle frontal gyrus, and substantia nigra. The samples were collected by the Banner Sun Health brain bank and were flash frozen."
+PI_full_name = "Michael Lee"
+PI_email = ""
+first_contributor = "Lee Marshall"
+first_contributor_email = ""
+other_contributors = "Lee Marshall, Kimberly Paquette, Kaitlyn Westra, Andrew Pyman, Ellison Lopes, Celia Kun-Rodrigues, Rita Guerreiro, Jose Bras, Michael Lee"
+support_grants = ""
+other_funding_source = ""
+publication_DOI = ""
+publication_PMID = ""
+n_samples = 75
+brain_super_region = "Temporal lobe,Frontal lobe,Midbrain"
+brain_region = "Hippocampus,Middle frontal gyrus,Substantia nigra"
+sample_info = ""
+sample_sheet = "PMDBS_snRNAseq.csv"
+disease = "PD"
+organism = "Homo Sapiens"
+
+[study]
+study_name = "PMDBS"
+description = ""
+team_name = "Team Lee"
+lab_name = ""
+submitter_name = ""
+submitter_email = ""
+
+[protocol]
+protocol_id = "P001"
+protocol_name = "Postmortem-derived Brain Sequencing Single Cell (sc)RNAseq Collection"
+version = "v2.0.0"
+github_url = ""
+sample_collection_summary = ""
+cell_extraction_summary = ""
+lib_prep_summary = ""
+data_processing_summary = ""
+protocols_io_DOI = "https://doi.org/10.5281/zenodo.14270014"
+other_reference = ""
+
+
+[meta_features]
+selected_features = [ "nCount_RNA", "nFeature_RNA", "sex",  "cell_type", "brain_region", "phase", "G2M_score", "S_score","leiden_res_0.20", "ASAP_sample_id", "case",]
+sample_id_column = "ASAP_sample_id"
+main_cluster_column = "cell_type"
+condition_column = "case"
+
+
+[visium_defaults]
+samples = [ "BN2023", "BN1076",]
+features = [ "smoothed_label_s5"]
+genes = ["SNCA"]

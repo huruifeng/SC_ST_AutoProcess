@@ -1,10 +1,9 @@
-[seurat]
-seurat_file = "DietFullIntegration_Oct2023_FinalOSR_6HC_MTG_FebCA_MajorMarkersUpdated2_SubCellTypes.rds"
+[datasetfile]
+file = "DietFullIntegration_Oct2023_FinalOSR_6HC_MTG_FebCA_MajorMarkersUpdated2_SubCellTypes.rds"
 datatype = "scRNAseq"
 
 [dataset]
 dataset_name = "PD5D_MTG_snRNAseq"
-assay = "scRNAseq"
 description = ""
 PI_full_name = "Clemens Scherzer"
 PI_email = "clemens.scherzer@yale.edu"
@@ -16,9 +15,12 @@ other_funding_source = ""
 publication_DOI = ""
 publication_PMID = ""
 n_samples = 106
-brain_super_region = "temporallobe"
+brain_super_region = "Temporal Lobe"
 brain_region = "Middle temporal gyrus"
 sample_info = ""
+sample_sheet = ""
+disease = "PD"
+organism = "Homo Sapiens"
 
 [study]
 study_name = "Parkinson5D"

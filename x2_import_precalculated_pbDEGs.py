@@ -91,6 +91,5 @@ print(gene_expr_df.shape)
 gene_expr_df = gene_expr_df.fillna(0)
 print(gene_expr_df.shape)
 
-# %%
 gene_expr_df = gene_expr_df.to_csv(dataset_folder + "/clustermarkers/pb_expr_matrix_DEGs_topN.csv")
 # %%
