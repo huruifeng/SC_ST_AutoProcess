@@ -14,25 +14,26 @@ library(presto)
 
 cat("===================================================\n")
 # Check if the script is run with the correct number of arguments
-args <- commandArgs(trailingOnly = TRUE)
-if (length(args) != 6) {
-	stop("Please provide the correct arguments.")
-}
+# args <- commandArgs(trailingOnly = TRUE)
+# if (length(args) != 6) {
+# 	stop("Please provide the correct arguments.")
+# }
 
-# Get the arguments
-seurat_obj_file <- args[1]
-output_dir <- args[2]
-cluster_col <- args[3]
-condition_col <- args[4]
-sample_col <- args[5]
-seurat_type <- args[6]
+# # Get the arguments
+# seurat_obj_file <- args[1]
+# output_dir <- args[2]
+# cluster_col <- args[3]
+# condition_col <- args[4]
+# sample_col <- args[5]
+# seurat_type <- args[6]
 
 
-# seurat_obj_file <- "Seurats/DietFullIntegration_Oct2023_FinalOSR_6HC_MTG_FebCA_MajorMarkersUpdated2.rds"
-# output_dir <- "datasets/PD5D_MTG_snRNAseq"
-# cluster_col <- "SubCellTypes"
-# condition_col <- "case"
-# sample_col <- "sample_id"
+seurat_obj_file <- "Seurats/pmdbs_lee_obj_updated.rds"
+output_dir <- "datasets/PMDBS_snRNAseq"
+cluster_col <- "cell_type"
+condition_col <- "case"
+sample_col <- "ASAP_sample_id"
+seurat_type <- "snrnaseq"
 
 
 clustermarkers_folder = paste0(output_dir, "/clustermarkers")
@@ -55,10 +56,10 @@ if(seurat_type == "scrnaseq" | seurat_type == "snrnaseq"){
 		stop("The Seurat object does not contain the 'RNA' assay.")
 	}
 	# Check if the Seurat object has the necessary assay data
-	if (!"data" %in% slotNames(seurat_obj@assays$RNA)) {
+	if (!"data" %in% names(seurat_obj@assays$RNA@layers)) {
 		stop("The Seurat object does not contain the 'data' slot in the 'RNA' assay.")
 	}
-	} else if (seurat_type == "snATACseq") {
+} else if (seurat_type == "snatacseq" | seurat_type == "scatacseq") {
 	# Check if the Seurat object has the necessary assay
 	if (!"ATAC" %in% names(seurat_obj@assays)) {
 		stop("The Seurat object does not contain the 'ATAC' assay.")
@@ -126,9 +127,9 @@ for (cell_type in cell_types) {
 	if (length(condition_ls) > 2) {
 		combinations <- combn(condition_ls, 2)
 		for (i in 1:ncol(combinations)) {
-			ident.1 <- combinations[1, i]
-			ident.2 <- combinations[2, i]
-			de_results <- FindMarkers(subset_obj, ident.1 = ident.1, ident.2 = ident.2, group.by = condition_col)
+			c1 <- combinations[1, i]
+			c2 <- combinations[2, i]
+			de_results <- FindMarkers(subset_obj, ident.1 = c1, ident.2 = c2, group.by = condition_col)
 			## add a column for the gene names
 			de_results$gene <- rownames(de_results)
 			
@@ -139,8 +140,8 @@ for (cell_type in cell_types) {
 			de_results_topN <- rbind(de_results[order(de_results$avg_log2FC, decreasing = TRUE), ][1:10, ],de_results[order(de_results$avg_log2FC, decreasing = FALSE), ][1:10, ])
 		
 			# Store the results in the list
-			de_results_list[[paste(cell_type, paste(ident.1, ident.2, sep = "vs"), sep = ".")]] <- de_results
-			de_results_topN_list[[paste(cell_type, paste(ident.1, ident.2, sep = "vs"), sep = ".")]] <- de_results_topN
+			de_results_list[[paste(cell_type, paste(c1, c2, sep = "vs"), sep = ".")]] <- de_results
+			de_results_topN_list[[paste(cell_type, paste(c1, c2, sep = "vs"), sep = ".")]] <- de_results_topN
 		}
 	} else {
 		de_results <- FindMarkers(subset_obj, ident.1 = condition_ls[1], ident.2 = condition_ls[2], group.by = condition_col)
@@ -153,8 +154,8 @@ for (cell_type in cell_types) {
 		## get top 10 upregulated DE genes and downregulated, base on logFC
 		de_results_topN <- rbind(de_results[order(de_results$avg_log2FC, decreasing = TRUE), ][1:10, ],de_results[order(de_results$avg_log2FC, decreasing = FALSE), ][1:10, ])
 		
-		de_results_list[[paste(cell_type, paste(ident.1, ident.2, sep = "vs"), sep = ".")]] <- de_results
-		de_results_topN_list[[paste(cell_type, paste(ident.1, ident.2, sep = "vs"), sep = ".")]] <- de_results_topN
+		de_results_list[[paste(cell_type, paste(condition_ls[1], condition_ls[2], sep = "vs"), sep = ".")]] <- de_results
+		de_results_topN_list[[paste(cell_type, paste(condition_ls[1], condition_ls[2], sep = "vs"), sep = ".")]] <- de_results_topN
 
 	}
 }
@@ -222,9 +223,9 @@ for (cell_type in cell_types) {
 	if (length(condition_ls) > 2) {
 		combinations <- combn(condition_ls, 2)
 		for (i in 1:ncol(combinations)) {
-			ident.1 <- combinations[1, i]
-			ident.2 <- combinations[2, i]
-			de_results <- FindMarkers(subset_obj, ident.1 = ident.1, ident.2 = ident.2, group.by = condition_col, test.use = "wilcox")
+			c1 <- combinations[1, i]
+			c2 <- combinations[2, i]
+			de_results <- FindMarkers(subset_obj, ident.1 = c1, ident.2 = c2, group.by = condition_col, test.use = "wilcox")
 			## add a column for the gene names
 			de_results$gene <- rownames(de_results)
 			
@@ -235,8 +236,8 @@ for (cell_type in cell_types) {
 			de_results_topN <- rbind(de_results[order(de_results$avg_log2FC, decreasing = TRUE), ][1:10, ],de_results[order(de_results$avg_log2FC, decreasing = FALSE), ][1:10, ])
 			
 			# Store the results in the list
-			pseudo_bulk_list[[paste(cell_type, paste(ident.1, ident.2, sep = "vs"), sep = ".")]] <- de_results
-			pseudo_bulk_topN_list[[paste(cell_type, paste(ident.1, ident.2, sep = "vs"), sep = ".")]] <- de_results_topN
+			pseudo_bulk_list[[paste(cell_type, paste(c1, c2, sep = "vs"), sep = ".")]] <- de_results
+			pseudo_bulk_topN_list[[paste(cell_type, paste(c1, c2, sep = "vs"), sep = ".")]] <- de_results_topN
 		}
 	} else {
 		de_results <- FindMarkers(subset_obj, ident.1 = condition_ls[1], ident.2 = condition_ls[2], group.by = condition_col,test.use = "wilcox")
