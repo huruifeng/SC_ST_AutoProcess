@@ -32,7 +32,7 @@ seurat_obj_file <- "Seurats/pmdbs_lee_obj_updated.rds"
 output_dir <- "datasets/PMDBS_snRNAseq"
 cluster_col <- "cell_type"
 condition_col <- "case"
-sample_col <- "ASAP_sample_id"
+sample_col <- "sample_id"
 seurat_type <- "snrnaseq"
 
 

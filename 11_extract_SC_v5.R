@@ -89,6 +89,8 @@ write_json(column_names, path = file.path(output_dir, "raw_metadata_columns.json
 # save the umap embedding
 cat("Save umap embedding...\n")
 umap_embeddings <- seurat_obj@reductions$umap@cell.embeddings
+## rename header to upper case
+colnames(umap_embeddings) <- toupper(colnames(umap_embeddings))
 write.csv(umap_embeddings, file = paste0(output_dir, "/raw_umap_embeddings.csv"), row.names = TRUE)
 
 

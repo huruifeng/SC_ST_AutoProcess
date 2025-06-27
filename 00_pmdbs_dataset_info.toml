@@ -45,7 +45,7 @@ other_reference = ""
 
 [meta_features]
 selected_features = [ "nCount_RNA", "nFeature_RNA", "sex",  "cell_type", "brain_region", "phase", "G2M_score", "S_score","leiden_res_0.20", "ASAP_sample_id", "case",]
-sample_id_column = "ASAP_sample_id"
+sample_id_column = "sample_id"
 main_cluster_column = "cell_type"
 condition_column = "case"
 

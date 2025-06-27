@@ -12,11 +12,17 @@ print = functools.partial(print, flush=True)
 print("============================================")
 # %% ==============================
 # Get the arguments
-dataset_path = sys.argv[1]
-kept_features = sys.argv[2].split(",")
-sample_col = sys.argv[3]
-cluster_col = sys.argv[4]
-condition_col = sys.argv[5]
+# dataset_path = sys.argv[1]
+# kept_features = sys.argv[2].split(",")
+# sample_col = sys.argv[3]
+# cluster_col = sys.argv[4]
+# condition_col = sys.argv[5]
+
+dataset_path = "datasets/PMDBS_snRNAseq"
+kept_features =["nCount_RNA", "nFeature_RNA", "sex",  "cell_type", "brain_region", "phase", "G2M_score", "S_score","leiden_res_0.20", "ASAP_sample_id", "case", "sample_id"]
+sample_col = "sample_id"
+cluster_col = "cell_type"
+condition_col = "case"
 
 print("Dataset path: ", dataset_path)
 print("Kept features: ", kept_features)
@@ -170,7 +176,7 @@ embeddings_data_nk.to_csv(dataset_path + "/umap_embeddings_50k.csv", index_label
 ## Process expression data
 print("Loading expression data...(Takes a while...be patient...)")
 ## rename_expression_data
-expression_data = pd.read_csv(dataset_path + "/raw_normalized_counts.csv", index_col=0, header=0)
+expression_data = pd.read_csv(dataset_path + "/raw_normalized_counts.csv", index_col=None, header=0)
 ## rename "Cell" column use barcode_cid map
 print("Renaming expression....")
 expression_data["cs_id"] = expression_data["Cell"].map(barcode_to_cid)

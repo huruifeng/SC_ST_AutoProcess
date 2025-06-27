@@ -14,9 +14,17 @@ lee$case <- ifelse(lee$primary_diagnosis == "Idiopathic PD", "PD", "Control")
 #   TRUE ~ "Other"
 # )
 
+lee_PMDBS<- read.csv("Seurats/pmdbs/metadata_release_PMDBS.csv", row.names = 1)
+lee$sample_id = lee_PMDBS$sample_id[match(lee$ASAP_sample_id, lee_PMDBS$ASAP_sample_id)] 
+
 capture.output(str(lee), file = paste0("Seurats/pmdbs/", "lee_obj_structure.txt"))
 
 saveRDS(lee, "Seurats/pmdbs_lee_obj_updated.rds")
+
+
+
+
+
 
 # ============================================
 metadata<- read.csv("Seurats/pmdbs/ASAP_team_Lee/pmdbs_sc_rnaseq_cohort_analysis_team-lee.final_metadata.csv")

@@ -186,7 +186,7 @@ with open(f"{dataset_path}/prepare_cellcount_output.log", "w") as log_file:
     if dataset_type.lower() in ["scrnaseq", "snrnaseq","visiumst"]:
 
         process_py = subprocess.Popen(
-            ["python3", "41_clustermarkers_postprocess.py", dataset_path, main_cluster_column, condition_column, "sex"],
+            ["python3", "41_clustermarkers_postprocess.py", dataset_path, main_cluster_column, "sex"],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,  # get string output, not bytes
