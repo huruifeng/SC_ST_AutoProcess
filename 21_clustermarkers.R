@@ -268,7 +268,7 @@ pooled_topN_DEGs <- unique(pooled_topN_DEGs)
 ## subset expr_matrix to only include pooled_topN_DEGs
 expr_matrix_pooled_topN_DGEs <- expr_matrix[pooled_topN_DEGs, ]
 ## save the pooled_topN_DEGs expression matrix
-write.csv(expr_matrix_pooled_topN_DGEs, paste0(clustermarkers_folder, "/pb_expr_matrix_topN_DEGs.csv"), row.names = TRUE)
+write.csv(expr_matrix_pooled_topN_DGEs, paste0(clustermarkers_folder, "/pb_expr_matrix_DEGs_topN.csv"), row.names = TRUE)
 
 cat("Done! cluster markers is done! ^_^ ...\n")
 

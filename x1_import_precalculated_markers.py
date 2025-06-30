@@ -6,19 +6,20 @@ import numpy as np
 
 
 #%% ============================================
-data_file = "Seurats/PrestoFindAllMarkersTop_renamed.tsv"
+data_file = "Seurats/Jie/pseudobulk_layer_all_deseq2_contsonly_12052023.csv"
 
-cluster_col = "group"
-gene_col = "feature"
-log2fc_col = "logFC"
+cluster_col = "layer"
+gene_col = "gene"
+log2fc_col = "log2FoldChange"
 padj_col = "padj"
-avg_expr_col = "avgExpr"
+avg_expr_col = "baseMean"
 
 
-dataset_folder = "datasets/PD5D_MTG_snRNAseq"
-meta_cluster_col = "SubCellTypes"
-meta_condition_col = "Condition"
+dataset_folder = "datasets/PD5D_MTG_VisiumST"
+meta_cluster_col = "smoothed_label_s5"
 meta_sex_col = "sex"
+
+meta_condition_col = "Condition"
 
 output_folder = dataset_folder + "/clustermarkers"
 if os.path.exists(output_folder) is False:
@@ -28,7 +29,7 @@ if os.path.exists(output_folder) is False:
 
 #%% ============================================
 # Load the data
-df = pd.read_csv(data_file, sep="\t", header=0)
+df = pd.read_csv(data_file, sep=",", header=0)
 
 ## get th top 10 markers for each cluster ordered by log2fc
 df = df.sort_values(by=[cluster_col, log2fc_col], ascending=[True, False])

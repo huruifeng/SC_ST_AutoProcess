@@ -52,7 +52,7 @@ for index, row in top_genes.iterrows():
 # print("marker genes dictionary:")
 # print(marker_genes_dict)
 # Save the dictionary to a JSON file
-with open(output_folder + "/cluster_markergenes.json", "w") as f:
+with open(output_folder + "/cluster_markergenes_TopN.json", "w") as f:
     json.dump(marker_genes_dict, f, indent=4)
 
 # %%============================================================================

@@ -6,7 +6,7 @@ import numpy as np
 
 
 #%% ============================================
-dataset_folder = "datasets/PD5D_MTG_snRNAseq"
+dataset_folder = "datasets/PD5D_MTG_VisiumST"
 
 # Load the dataset metadata
 data_folder = "Seurats/complex_assignment_casewilcoxauc_renamed"
