@@ -58,7 +58,7 @@ for cluster, group in df_top.groupby("cluster"):
     marker_genes_dict[cluster] = group[["gene", "avg_log2FC", "p_val_adj"]].values.tolist()
 
 # Save the markers dictionary to a JSON file
-with open(output_folder + "/cluster_markergenes.json", "w") as f:
+with open(output_folder + "/cluster_markergenes_TopN.json", "w") as f:
     json.dump(marker_genes_dict, f, indent=2)
 
 #%% ============================================
