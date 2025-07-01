@@ -31,6 +31,9 @@ if os.path.exists(output_folder) is False:
 # Load the data
 df = pd.read_csv(data_file, sep=",", header=0)
 
+## fileter out the rows where the padj value is greater than 0.05
+df = df[df[padj_col] <= 0.05]
+
 ## get th top 10 markers for each cluster ordered by log2fc
 df = df.sort_values(by=[cluster_col, log2fc_col], ascending=[True, False])
 df_top = df.groupby(cluster_col).head(10)
@@ -48,7 +51,7 @@ df_top = df_top.rename(columns={
 df_top["avg_log2FC"] = df_top["avg_log2FC"].round(2)
 df_top["p_val_adj"] = df_top["p_val_adj"].round(2)
 ## save the top markers to a CSV file
-df_top.to_csv(output_folder + "/cluster_markergenes_TopN.csv", index=False)
+df_top.to_csv(output_folder + "/cluster_markergenes_topN.csv", index=False)
 
 
 #%% ============================================
@@ -59,7 +62,7 @@ for cluster, group in df_top.groupby("cluster"):
     marker_genes_dict[cluster] = group[["gene", "avg_log2FC", "p_val_adj"]].values.tolist()
 
 # Save the markers dictionary to a JSON file
-with open(output_folder + "/cluster_markergenes_TopN.json", "w") as f:
+with open(output_folder + "/cluster_markergenes_topN.json", "w") as f:
     json.dump(marker_genes_dict, f, indent=2)
 
 #%% ============================================

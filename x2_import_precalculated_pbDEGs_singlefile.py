@@ -32,7 +32,7 @@ for cluster_DE in all_cluster_DEs:
     if sub_df.empty:
         print(f"No data found for cluster_DE: {cluster_DE}. Skipping...")
         continue
-    sub_df["cluster_DE"] = cluster_DE + ".PDvsHC" 
+    sub_df["cluster_DE"] = cluster_DE + ".CasevsControl" 
     sub_df = sub_df.rename(columns={pval_col: "p_val", logFC_col: "avg_log2FC", padj_col: "p_val_adj", feature_col: "gene"})
     sub_df = sub_df[["cluster_DE", "gene", "p_val", "avg_log2FC", "p_val_adj"]]
     cluster_pb_DEGs = pd.concat([cluster_pb_DEGs, sub_df], ignore_index=True)
@@ -56,8 +56,8 @@ cluster_pb_DEGs_topN.to_csv(output_file_topN, index=False)
 pb_expr_df = pd.read_csv(pb_expr_file, index_col=0, header=0)
 
 ## colname format: SampleName_ClusterName_Condition, e.g., BN0737_TCell_HC
-col_names = [i.strip().replace("Case", "PD").replace("Control", "HC") for i in pb_expr_df.columns.tolist()]
-pb_expr_df = pb_expr_df.rename(columns={col: f"{col.split('_')[1]}_{col.split('_')[2]}_{col.split('_')[0]}" for col in col_names})
+col_names = pb_expr_df.columns.tolist()
+pb_expr_df.columns = [f"{col.split('_')[1]}_{col.split('_')[2]}_{col.split('_')[0]}" for col in col_names]
 
 
 gene_pool = []
@@ -76,7 +76,7 @@ for row in cluster_pb_DEGs_topN.itertuples():
         for col_i in pb_expr_df.columns:
             gene_expr[gene][col_i] = pb_expr_df.loc[gene,col_i].round(2)
     else:
-        continue
+        print(f"Gene {gene} not found in pb_expr_df, skipping...")
 
 # %% ============================================
 # Create a DataFrame from the gene expression data

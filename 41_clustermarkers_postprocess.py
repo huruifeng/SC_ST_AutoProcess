@@ -43,7 +43,7 @@ top_genes = (
 )
 
 # Save or inspect the result
-top_genes.loc[:,["cluster","gene","avg_log2FC","p_val_adj"]].to_csv(output_folder+'/cluster_markergenes_TopN.csv', index=False)
+top_genes.loc[:,["cluster","gene","avg_log2FC","p_val_adj"]].to_csv(output_folder+'/cluster_markergenes_topN.csv', index=False)
 
 ## save marker genes of each cell type into a dictionary
 marker_genes_dict = defaultdict(list)
@@ -52,7 +52,7 @@ for index, row in top_genes.iterrows():
 # print("marker genes dictionary:")
 # print(marker_genes_dict)
 # Save the dictionary to a JSON file
-with open(output_folder + "/cluster_markergenes_TopN.json", "w") as f:
+with open(output_folder + "/cluster_markergenes_topN.json", "w") as f:
     json.dump(marker_genes_dict, f, indent=4)
 
 # %%============================================================================

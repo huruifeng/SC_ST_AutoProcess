@@ -259,8 +259,8 @@ for (cell_type in cell_types) {
 pseudo_bulk_dt <- rbindlist(pseudo_bulk_list, idcol = "cluster_DE")
 pseudo_bulk_topN_dt <- rbindlist(pseudo_bulk_topN_list, idcol = "cluster_DE")
 # Save to CSV
-fwrite(pseudo_bulk_dt, paste0(clustermarkers_folder, "/cluster_pseudobulk_DEGs.csv"), row.names = FALSE)
-fwrite(pseudo_bulk_topN_dt, paste0(clustermarkers_folder, "/cluster_pseudobulk_DEGs_topN.csv"), row.names = FALSE)
+fwrite(pseudo_bulk_dt, paste0(clustermarkers_folder, "/cluster_pb_DEGs.csv"), row.names = FALSE)
+fwrite(pseudo_bulk_topN_dt, paste0(clustermarkers_folder, "/cluster_pb_DEGs_topN.csv"), row.names = FALSE)
 
 pooled_topN_DEGs = pseudo_bulk_topN_dt$gene
 ## remove duplicates
