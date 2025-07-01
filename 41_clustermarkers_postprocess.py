@@ -13,7 +13,7 @@ import numpy as np
 # cluster_col = sys.argv[2]  # e.g. "SubCellTypes"
 # sex_col = sys.argv[3]  # e.g. "sex"
 
-dataset_folder = "datasets/PMDBS_snRNAseq"
+dataset_folder = "datasets/PMDBS_SN_snRNAseq"
 cluster_col = "cell_type"
 sex_col = "sex"
 

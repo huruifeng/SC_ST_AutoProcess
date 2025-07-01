@@ -24,6 +24,9 @@ cluster_pb_DEGs_topN = pd.DataFrame(columns=["cluster_DE","p_val","avg_log2FC","
 topN = 10  # Number of top DEGs to keep
 
 df = pd.read_csv(DE_file, index_col=0, header=0)
+# Filter out rows where the p-value is greater than 0.05
+df = df[df[padj_col] <= 0.05]
+
 all_cluster_DEs = df[cluster_DE_col].unique().tolist()
 
 for cluster_DE in all_cluster_DEs:

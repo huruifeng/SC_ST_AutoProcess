@@ -25,8 +25,8 @@ cat("===================================================\n")
 # output_dir <- args[2]
 # cluster_col <- args[3]
 
-seurat_obj_file <- "Seurats/pmdbs_lee_obj_updated.rds"
-output_dir <- "datasets/PMDBS_snRNAseq"
+seurat_obj_file <- "Seurats/pmdbs/pmdbs_lee_obj_updated_SN.rds"
+output_dir <- "datasets/PMDBS_SN_snRNAseq"
 cluster_col <- "cell_type"
 
 

@@ -18,8 +18,8 @@ print("============================================")
 # cluster_col = sys.argv[4]
 # condition_col = sys.argv[5]
 
-dataset_path = "datasets/PMDBS_snRNAseq"
-kept_features =["nCount_RNA", "nFeature_RNA", "sex",  "cell_type", "brain_region", "phase", "G2M_score", "S_score","leiden_res_0.10","leiden_res_0.20", "case", "sample_id"]
+dataset_path = "datasets/PMDBS_SN_snRNAseq"
+kept_features =["nCount_RNA", "nFeature_RNA", "sex",  "cell_type", "phase", "G2M_score", "S_score","leiden_res_0.10","leiden_res_0.20", "case", "sample_id"]
 sample_col = "sample_id"
 cluster_col = "cell_type"
 condition_col = "case"
